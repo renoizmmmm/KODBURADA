@@ -445,3 +445,90 @@
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
+                    document.getElementById('profileImg').src = e.target.result;
+                    localStorage.setItem('profileImage', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(`${sectionId}-section`).style.display = 'block';
+
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        function updateProfile() {
+            const name = document.getElementById('nameInput').value;
+            const email = document.getElementById('emailInput').value;
+
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            currentUser.name = name;
+            currentUser.email = email;
+
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            document.getElementById('profileName').textContent = name;
+            document.getElementById('profileEmail').textContent = email;
+
+            showToast('Profil başarıyla güncellendi!');
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type === 'error' ? 'toast-error' : ''}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('toast-hide');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            const savedImage = localStorage.getItem('profileImage');
+            if (savedImage) {
+                document.getElementById('profileImg').src = savedImage;
+            }
+
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                window.location.href = 'login.html';
+            } else {
+                document.getElementById('profileName').textContent = currentUser.name;
+                document.getElementById('profileEmail').textContent = currentUser.email;
+                document.getElementById('nameInput').value = currentUser.name;
+                document.getElementById('emailInput').value = currentUser.email;
+            }
+
+            document.getElementById('searchForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const inputs = e.target.querySelectorAll('.form-input');
+                const searchQuery = Array.from(inputs)
+                    .map(input => input.value.trim())
+                    .filter(Boolean)
+                    .join(' ') + ' filetype:pdf';
+
+                if (searchQuery) {
+                    window.open(`https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`, '_blank');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
