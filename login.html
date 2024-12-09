@@ -117,37 +117,39 @@
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+         document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
 
-            // LocalStorage'dan kullanıcıları al
-            const users = JSON.parse(localStorage.getItem('users')) || [];
-            
-            // Kullanıcı kontrolü
-            const user = users.find(u => u.username === username && u.password === password);
+    // Admin kontrolü
+    if(username === "reno" && password === "ren1") {
+        sessionStorage.setItem('isLoggedIn', 'true');
+        sessionStorage.setItem('username', 'admin');
+        sessionStorage.setItem('isAdmin', 'true');
+        window.location.href = 'admin.html';
+        return;
+    }
 
-            if(user) {
-                // Giriş başarılı
-                sessionStorage.setItem('isLoggedIn', 'true');
-                sessionStorage.setItem('username', username);
-                
-                // Kullanıcı durumunu güncelle
-                const updatedUsers = users.map(u => {
-                    if(u.username === username) {
-                        return {...u, isOnline: true, lastLogin: new Date().toISOString()};
-                    }
-                    return u;
-                });
-                localStorage.setItem('users', JSON.stringify(updatedUsers));
+    // Normal kullanıcı kontrolü
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const user = users.find(u => u.username === username && u.password === password);
 
-                window.location.href = 'index.html';
-            } else {
-                alert('Kullanıcı adı veya şifre hatalı!');
+    if(user) {
+        sessionStorage.setItem('isLoggedIn', 'true');
+        sessionStorage.setItem('username', username);
+        
+        const updatedUsers = users.map(u => {
+            if(u.username === username) {
+                return {...u, isOnline: true, lastLogin: new Date().toISOString()};
             }
+            return u;
         });
-    </script>
-</body>
-</html>
+        localStorage.setItem('users', JSON.stringify(updatedUsers));
+
+        window.location.href = 'index.html';
+    } else {
+        alert('Kullanıcı adı veya şifre hatalı!');
+    }
+});
