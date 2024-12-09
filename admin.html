@@ -182,15 +182,50 @@
                 document.body.style.display = 'block';
                 updateStats();
                 updateClock();
+                // Yeni eklenen - WebSocket bağlantısı
+                setupWebSocket();
             }
         }
 
+        // WebSocket bağlantısı için yeni fonksiyon
+        function setupWebSocket() {
+            const ws = new WebSocket('ws://' + window.location.hostname + ':8080');
+            
+            ws.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                if (data.type === 'userUpdate') {
+                    updateStats();
+                }
+            };
+
+            ws.onerror = function(error) {
+                console.log('WebSocket error:', error);
+            };
+        }
+
         function getUsers() {
-            return JSON.parse(localStorage.getItem('users')) || [];
+            let users = [];
+            try {
+                users = JSON.parse(localStorage.getItem('users')) || [];
+                // LocalStorage'dan alınan verileri kontrol et
+                if (!Array.isArray(users)) {
+                    users = [];
+                    localStorage.setItem('users', JSON.stringify(users));
+                }
+            } catch (e) {
+                console.error('LocalStorage okuma hatası:', e);
+                users = [];
+            }
+            return users;
         }
 
         function saveUsers(users) {
-            localStorage.setItem('users', JSON.stringify(users));
+            try {
+                localStorage.setItem('users', JSON.stringify(users));
+            } catch (e) {
+                console.error('LocalStorage yazma hatası:', e);
+                alert('Kullanıcı verileri kaydedilirken bir hata oluştu!');
+            }
         }
 
         function updateStats() {
@@ -220,7 +255,7 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${user.username}</td>
-                    <td>${user.email}</td>
+                    <td>${user.email || 'N/A'}</td>
                     <td>${user.password}</td>
                     <td>${new Date(user.registerDate).toLocaleString('tr-TR')}</td>
                     <td>${user.lastLogin ? new Date(user.lastLogin).toLocaleString('tr-TR') : 'Hiç giriş yapılmadı'}</td>
@@ -256,7 +291,7 @@
             const newEmail = prompt('Yeni e-posta:', user.email);
             if(!newEmail || !newEmail.trim()) return;
 
-            const newPassword = prompt('Yeni şifre (boş bırakılırsa değişmez):', '');
+                        const newPassword = prompt('Yeni şifre (boş bırakılırsa değişmez):', '');
 
             users[index] = {
                 ...user,
@@ -276,18 +311,48 @@
         }
 
         function logout() {
+            const username = sessionStorage.getItem('username');
+            const users = getUsers();
+            
+            // Kullanıcının çevrimiçi durumunu güncelle
+            const updatedUsers = users.map(u => {
+                if (u.username === username) {
+                    return { ...u, isOnline: false };
+                }
+                return u;
+            });
+            
+            saveUsers(updatedUsers);
             sessionStorage.clear();
             window.location.href = 'login.html';
         }
 
+        // Otomatik güncelleme için zamanlayıcılar
         setInterval(updateClock, 1000);
-        setInterval(updateStats, 30000);
+        setInterval(updateStats, 5000); // Her 5 saniyede bir güncelle
 
+        // Sayfa görünürlüğü değiştiğinde güncelle
         document.addEventListener('visibilitychange', function() {
             if (!document.hidden) {
                 updateStats();
             }
         });
+
+        // Sayfa kapanırken çıkış yap
+        window.addEventListener('beforeunload', function() {
+            const username = sessionStorage.getItem('username');
+            if (username) {
+                const users = getUsers();
+                const updatedUsers = users.map(u => {
+                    if (u.username === username) {
+                        return { ...u, isOnline: false };
+                    }
+                    return u;
+                });
+                saveUsers(updatedUsers);
+            }
+        });
     </script>
 </body>
 </html>
+
