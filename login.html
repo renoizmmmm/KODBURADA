@@ -23,7 +23,7 @@
 
         .login-container {
             background: rgba(15, 15, 15, 0.9);
-            padding: 2rem;
+            padding: 2.5rem;
             border-radius: 15px;
             border: 1px solid rgba(0, 255, 85, 0.3);
             box-shadow: 0 0 20px rgba(0, 255, 85, 0.2);
@@ -34,12 +34,18 @@
         h1 {
             text-align: center;
             color: #00ff55;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             text-shadow: 0 0 10px rgba(0, 255, 85, 0.5);
         }
 
         .input-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            color: #00ff55;
+            margin-bottom: 0.5rem;
         }
 
         .input-group input {
@@ -49,18 +55,12 @@
             border: 2px solid #00ff55;
             border-radius: 8px;
             color: #fff;
-            margin-top: 0.5rem;
             transition: all 0.3s ease;
         }
 
         .input-group input:focus {
             outline: none;
             box-shadow: 0 0 15px rgba(0, 255, 85, 0.4);
-        }
-
-        .input-group label {
-            color: #00ff55;
-            font-size: 0.9rem;
         }
 
         button {
@@ -72,9 +72,8 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-            margin-bottom: 1rem;
             transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(0, 255, 85, 0.2);
+            margin-bottom: 1rem;
         }
 
         button:hover {
@@ -120,14 +119,33 @@
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            // Basit bir kontrol (gerçek uygulamada sunucu tarafında yapılmalı)
-            if(username === "admin" && password === "1234") {
-                window.location.href = "index.html";
+            // LocalStorage'dan kullanıcıları al
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            
+            // Kullanıcı kontrolü
+            const user = users.find(u => u.username === username && u.password === password);
+
+            if(user) {
+                // Giriş başarılı
+                sessionStorage.setItem('isLoggedIn', 'true');
+                sessionStorage.setItem('username', username);
+                
+                // Kullanıcı durumunu güncelle
+                const updatedUsers = users.map(u => {
+                    if(u.username === username) {
+                        return {...u, isOnline: true, lastLogin: new Date().toISOString()};
+                    }
+                    return u;
+                });
+                localStorage.setItem('users', JSON.stringify(updatedUsers));
+
+                window.location.href = 'index.html';
             } else {
-                alert("Hatalı kullanıcı adı veya şifre!");
+                alert('Kullanıcı adı veya şifre hatalı!');
             }
         });
     </script>
