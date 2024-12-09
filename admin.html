@@ -79,50 +79,28 @@
     </div>
 
     <script>
-    // Güvenlik ve Yetkilendirme Fonksiyonları
-    const ADMIN_SECRET_KEY = 'SECURE_ADMIN_KEY_2024_SUPER_SECRET';
-    const ENCRYPTION_KEY = 'GLOBAL_USER_ENCRYPTION_2024';
-
-    // Basit şifreleme fonksiyonu
-    function encrypt(data) {
-        return btoa(JSON.stringify(data));
-    }
-
-    function decrypt(encodedData) {
-        return JSON.parse(atob(encodedData));
-    }
+    // Sabit Anahtarlar
+    const ADMIN_SECRET_KEY = 'admin_123!@#SecretKey_2024';
+    const ENCRYPTION_KEY = 'encryption_secure_2024!@#$%';
 
     // Admin Doğrulama
     function checkAdminAuth() {
-        const adminData = localStorage.getItem('adminAuthData');
-        if (!adminData) {
+        const isLoggedIn = localStorage.getItem('isAdminLoggedIn');
+        const adminUsername = localStorage.getItem('adminUsername');
+        
+        if (!isLoggedIn || isLoggedIn !== 'true') {
             window.location.href = 'login.html';
             return false;
         }
 
-        try {
-            const decryptedData = decrypt(adminData);
-            if (decryptedData.key !== ADMIN_SECRET_KEY) {
-                window.location.href = 'login.html';
-                return false;
-            }
-            
-            document.getElementById('adminUsername').textContent = decryptedData.username;
-            return true;
-        } catch {
-            window.location.href = 'login.html';
-            return false;
-        }
+        document.getElementById('adminUsername').textContent = adminUsername || 'Admin';
+        return true;
     }
 
     // Global Kullanıcı Veritabanı İşlemleri
     function getUsers() {
-        const encryptedUsers = localStorage.getItem('globalUserDatabase') || '[]';
-        try {
-            return JSON.parse(encryptedUsers);
-        } catch {
-            return [];
-        }
+        const users = localStorage.getItem('globalUserDatabase');
+        return users ? JSON.parse(users) : [];
     }
 
     function saveUsers(users) {
@@ -250,7 +228,8 @@
 
     // Çıkış İşlemi
     function logout() {
-        localStorage.removeItem('adminAuthData');
+        localStorage.removeItem('isAdminLoggedIn');
+        localStorage.removeItem('adminUsername');
         window.location.href = 'login.html';
     }
 
