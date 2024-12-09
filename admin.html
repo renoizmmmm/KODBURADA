@@ -24,8 +24,83 @@
             padding: 20px;
         }
 
-        /* Your existing styles remain the same */
-        /* ... */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .users-table th,
+        .users-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .delete-btn {
+            background: rgba(255, 0, 0, 0.2);
+        }
+
+        .delete-btn:hover {
+            background: rgba(255, 0, 0, 0.3);
+        }
+
+        .online-status {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .online {
+            background: #4CAF50;
+        }
+
+        .offline {
+            background: #f44336;
+        }
 
         @media (max-width: 768px) {
             .header {
@@ -38,7 +113,6 @@
             .users-table {
                 display: block;
                 overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
             }
 
             .stat-card {
@@ -52,24 +126,50 @@
                 width: auto;
             }
         }
-
-        /* Add touch-friendly styles */
-        @media (hover: none) {
-            .action-btn:active {
-                background: rgba(255, 255, 255, 0.2);
-                transform: translateY(0);
-            }
-        }
     </style>
 </head>
 <body>
-    <!-- Your existing HTML structure remains the same -->
+    <div class="header">
+        <h1>Admin Paneli</h1>
+        <div id="clock"></div>
+        <button class="action-btn" onclick="logout()">Çıkış Yap</button>
+    </div>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <h3>Toplam Kullanıcılar</h3>
+            <p id="totalUsers">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Online Kullanıcılar</h3>
+            <p id="onlineUsers">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Bugünkü Kayıtlar</h3>
+            <p id="todayRegistrations">0</p>
+        </div>
+    </div>
+
+    <table class="users-table">
+        <thead>
+            <tr>
+                <th>Kullanıcı Adı</th>
+                <th>E-posta</th>
+                <th>Şifre</th>
+                <th>Kayıt Tarihi</th>
+                <th>Son Giriş</th>
+                <th>Durum</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody id="usersList"></tbody>
+    </table>
+
     <script>
-        // Improved admin check
         function checkAdminAuth() {
             const isAdmin = sessionStorage.getItem('isAdmin');
             const username = sessionStorage.getItem('username');
-            
+
             if (!isAdmin || username !== 'admin') {
                 window.location.href = 'login.html';
                 return false;
@@ -85,7 +185,6 @@
             }
         }
 
-        // Improved user management
         function getUsers() {
             return JSON.parse(localStorage.getItem('users')) || [];
         }
@@ -181,11 +280,9 @@
             window.location.href = 'login.html';
         }
 
-        // Auto-update
         setInterval(updateClock, 1000);
         setInterval(updateStats, 30000);
 
-        // Handle visibility change
         document.addEventListener('visibilitychange', function() {
             if (!document.hidden) {
                 updateStats();
