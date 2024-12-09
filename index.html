@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kış Temalı PDF Arama Motoru</title>
+    <title>PDF Arama Sistemi</title>
     <style>
         * {
             margin: 0;
@@ -16,29 +16,47 @@
             background: #0f0f0f;
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: rgba(15, 15, 15, 0.95);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(0, 255, 85, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(0, 255, 85, 0.2);
+        }
+
+        .user-info {
+            color: #00ff55;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff3333;
+            border: 1px solid #ff3333;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 0, 0, 0.3);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .snowflake {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: white;
-            border-radius: 50%;
-            filter: blur(1px);
-            animation: snowfall linear infinite;
-        }
-
-        @keyframes snowfall {
-            0% {
-                transform: translateY(-100vh);
-            }
-            100% {
-                transform: translateY(100vh);
-            }
+            padding: 2rem;
         }
 
         .search-container {
@@ -46,19 +64,16 @@
             padding: 2rem;
             border-radius: 15px;
             border: 1px solid rgba(0, 255, 85, 0.3);
-            box-shadow: 0 0 20px rgba(0, 255, 85, 0.2),
-                        inset 0 0 20px rgba(0, 255, 85, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 85, 0.2);
             width: 90%;
             max-width: 600px;
             backdrop-filter: blur(10px);
-            z-index: 1;
         }
 
         h1 {
             text-align: center;
             color: #00ff55;
             margin-bottom: 1.5rem;
-            font-size: 2rem;
             text-shadow: 0 0 10px rgba(0, 255, 85, 0.5);
         }
 
@@ -74,15 +89,13 @@
             background: rgba(15, 15, 15, 0.8);
             border: 2px solid #00ff55;
             border-radius: 8px;
-            font-size: 1rem;
             color: #fff;
             transition: all 0.3s ease;
-            box-shadow: 0 0 10px rgba(0, 255, 85, 0.2);
         }
 
         input[type="text"]:focus {
             outline: none;
-            box-shadow: 0 0 20px rgba(0, 255, 85, 0.4);
+            box-shadow: 0 0 15px rgba(0, 255, 85, 0.4);
         }
 
         button {
@@ -92,15 +105,14 @@
             padding: 12px 24px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1rem;
             font-weight: bold;
             transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(0, 255, 85, 0.4);
+            box-shadow: 0 0 15px rgba(0, 255, 85, 0.2);
         }
 
         button:hover {
             background: #00cc44;
-            box-shadow: 0 0 25px rgba(0, 255, 85, 0.6);
+            box-shadow: 0 0 25px rgba(0, 255, 85, 0.4);
             transform: scale(1.05);
         }
 
@@ -120,47 +132,47 @@
             cursor: pointer;
             transition: all 0.3s ease;
             border: 1px solid rgba(0, 255, 85, 0.3);
-            box-shadow: 0 0 10px rgba(0, 255, 85, 0.2);
         }
 
         .filter-option:hover {
             background: rgba(0, 255, 85, 0.2);
             box-shadow: 0 0 15px rgba(0, 255, 85, 0.4);
-            transform: scale(1.05);
-        }
-
-        #results {
-            margin-top: 2rem;
-            color: #fff;
         }
     </style>
 </head>
 <body>
-    <div class="search-container">
-        <h1>PDF Arama Motoru</h1>
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="PDF dosyası ara..." autofocus>
-            <button onclick="searchPDF()">Ara</button>
+    <nav class="navbar">
+        <div class="user-info">
+            <span id="username">Hoşgeldin, Kullanıcı</span>
         </div>
-        <div class="filters">
-            <div class="filter-option">Son 24 Saat</div>
-            <div class="filter-option">Son 1 Hafta</div>
-            <div class="filter-option">Sadece PDF</div>
+        <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
+    </nav>
+
+    <div class="main-content">
+        <div class="search-container">
+            <h1>PDF Arama Motoru</h1>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="PDF dosyası ara..." autofocus>
+                <button onclick="searchPDF()">Ara</button>
+            </div>
+            <div class="filters">
+                <div class="filter-option">Son 24 Saat</div>
+                <div class="filter-option">Son 1 Hafta</div>
+                <div class="filter-option">Sadece PDF</div>
+            </div>
         </div>
-        <div id="results"></div>
     </div>
 
     <script>
-        // Kar taneleri oluşturma
-        function createSnowflakes() {
-            for (let i = 0; i < 50; i++) {
-                const snowflake = document.createElement('div');
-                snowflake.className = 'snowflake';
-                snowflake.style.left = Math.random() * 100 + 'vw';
-                snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
-                snowflake.style.opacity = Math.random();
-                snowflake.style.width = snowflake.style.height = Math.random() * 5 + 5 + 'px';
-                document.body.appendChild(snowflake);
+        // Sayfa yüklendiğinde oturum kontrolü
+        window.onload = function() {
+            if (!sessionStorage.getItem('isLoggedIn')) {
+                window.location.href = 'login.html';
+            }
+            // Kullanıcı adını göster
+            const username = sessionStorage.getItem('username');
+            if (username) {
+                document.getElementById('username').textContent = `Hoşgeldin, ${username}`;
             }
         }
 
@@ -169,6 +181,11 @@
             const searchQuery = `${searchTerm} filetype:pdf`;
             const googleSearchURL = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
             window.open(googleSearchURL, '_blank');
+        }
+
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = 'login.html';
         }
 
         document.getElementById('searchInput').addEventListener('keypress', function(e) {
@@ -185,15 +202,6 @@
                 }, 200);
             });
         });
-
-        // Sayfa yüklendiğinde kar tanelerini oluştur
-        createSnowflakes();
-
-        // Kar tanelerini periyodik olarak yenile
-        setInterval(() => {
-            document.querySelectorAll('.snowflake').forEach(flake => flake.remove());
-            createSnowflakes();
-        }, 5000);
     </script>
 </body>
 </html>
