@@ -36,6 +36,11 @@
             gap: 1rem;
         }
 
+        #clock {
+            color: #00ff55;
+            font-weight: bold;
+        }
+
         .logout-btn {
             background: rgba(255, 0, 0, 0.2);
             color: #ff3333;
@@ -43,7 +48,7 @@
             padding: 0.5rem 1rem;
             border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s ease;
+                        transition: all 0.3s ease;
         }
 
         .logout-btn:hover {
@@ -98,7 +103,7 @@
             box-shadow: 0 0 15px rgba(0, 255, 85, 0.4);
         }
 
-        button {
+        .search-btn {
             background: #00ff55;
             color: #0f0f0f;
             border: none;
@@ -110,7 +115,7 @@
             box-shadow: 0 0 15px rgba(0, 255, 85, 0.2);
         }
 
-        button:hover {
+        .search-btn:hover {
             background: #00cc44;
             box-shadow: 0 0 25px rgba(0, 255, 85, 0.4);
             transform: scale(1.05);
@@ -138,12 +143,29 @@
             background: rgba(0, 255, 85, 0.2);
             box-shadow: 0 0 15px rgba(0, 255, 85, 0.4);
         }
+
+        .admin-link {
+            color: #00ff55;
+            text-decoration: none;
+            margin-left: 1rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid #00ff55;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .admin-link:hover {
+            background: rgba(0, 255, 85, 0.1);
+            box-shadow: 0 0 15px rgba(0, 255, 85, 0.3);
+        }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="user-info">
-            <span id="username">Hoşgeldin, Kullanıcı</span>
+            <span id="username">Hoşgeldin</span>
+            <div id="clock"></div>
+            <a href="admin.html" class="admin-link" id="adminLink" style="display: none;">Admin Paneli</a>
         </div>
         <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
     </nav>
@@ -153,7 +175,7 @@
             <h1>PDF Arama Motoru</h1>
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="PDF dosyası ara..." autofocus>
-                <button onclick="searchPDF()">Ara</button>
+                <button class="search-btn" onclick="searchPDF()">Ara</button>
             </div>
             <div class="filters">
                 <div class="filter-option">Son 24 Saat</div>
@@ -164,15 +186,43 @@
     </div>
 
     <script>
+        // Saat gösterimi
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('tr-TR');
+            document.getElementById('clock').textContent = timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
         // Sayfa yüklendiğinde oturum kontrolü
         window.onload = function() {
             if (!sessionStorage.getItem('isLoggedIn')) {
                 window.location.href = 'login.html';
             }
-            // Kullanıcı adını göster
+            
             const username = sessionStorage.getItem('username');
             if (username) {
                 document.getElementById('username').textContent = `Hoşgeldin, ${username}`;
+                
+                // Admin kontrolü
+                if (username === 'admin') {
+                    document.getElementById('adminLink').style.display = 'inline-block';
+                }
+            }
+
+            // Kullanıcı durumunu güncelle
+            updateUserStatus(username, true);
+        }
+
+        function updateUserStatus(username, isOnline) {
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            const userIndex = users.findIndex(u => u.username === username);
+            
+            if (userIndex !== -1) {
+                users[userIndex].isOnline = isOnline;
+                users[userIndex].lastLogin = new Date().toISOString();
+                localStorage.setItem('users', JSON.stringify(users));
             }
         }
 
@@ -184,6 +234,8 @@
         }
 
         function logout() {
+            const username = sessionStorage.getItem('username');
+            updateUserStatus(username, false);
             sessionStorage.clear();
             window.location.href = 'login.html';
         }
@@ -201,6 +253,14 @@
                     this.style.background = 'rgba(0, 255, 85, 0.1)';
                 }, 200);
             });
+        });
+
+        // Sayfa kapatıldığında kullanıcı durumunu güncelle
+        window.addEventListener('beforeunload', function() {
+            const username = sessionStorage.getItem('username');
+            if (username) {
+                updateUserStatus(username, false);
+            }
         });
     </script>
 </body>
