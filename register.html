@@ -19,7 +19,6 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            position: relative;
         }
 
         .register-container {
@@ -29,8 +28,7 @@
             border: 1px solid rgba(0, 255, 85, 0.3);
             box-shadow: 0 0 20px rgba(0, 255, 85, 0.2);
             width: 90%;
-            max-width: 450px;
-            backdrop-filter: blur(10px);
+            max-width: 400px;
         }
 
         h1 {
@@ -38,19 +36,16 @@
             color: #00ff55;
             margin-bottom: 2rem;
             text-shadow: 0 0 10px rgba(0, 255, 85, 0.5);
-            font-size: 2rem;
         }
 
         .input-group {
             margin-bottom: 1.5rem;
-            position: relative;
         }
 
         .input-group label {
             display: block;
             color: #00ff55;
             margin-bottom: 0.5rem;
-            font-size: 0.9rem;
         }
 
         .input-group input {
@@ -60,7 +55,6 @@
             border: 2px solid #00ff55;
             border-radius: 8px;
             color: #fff;
-            font-size: 1rem;
             transition: all 0.3s ease;
         }
 
@@ -71,28 +65,24 @@
 
         button {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             background: #00ff55;
             color: #0f0f0f;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1.1rem;
             font-weight: bold;
-            margin-top: 1rem;
             transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(0, 255, 85, 0.2);
+            margin-bottom: 1rem;
         }
 
         button:hover {
             background: #00cc44;
             box-shadow: 0 0 25px rgba(0, 255, 85, 0.4);
-            transform: scale(1.02);
         }
 
         .login-link {
             text-align: center;
-            margin-top: 1.5rem;
             color: #00ff55;
         }
 
@@ -100,18 +90,10 @@
             color: #00ff55;
             text-decoration: none;
             font-weight: bold;
-            transition: all 0.3s ease;
         }
 
         .login-link a:hover {
             text-shadow: 0 0 10px rgba(0, 255, 85, 0.5);
-        }
-
-        .error-message {
-            color: #ff3333;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-            display: none;
         }
     </style>
 </head>
@@ -122,22 +104,18 @@
             <div class="input-group">
                 <label for="username">Kullanıcı Adı</label>
                 <input type="text" id="username" required>
-                <div class="error-message" id="usernameError"></div>
             </div>
             <div class="input-group">
                 <label for="email">E-posta</label>
                 <input type="email" id="email" required>
-                <div class="error-message" id="emailError"></div>
             </div>
             <div class="input-group">
                 <label for="password">Şifre</label>
                 <input type="password" id="password" required>
-                <div class="error-message" id="passwordError"></div>
             </div>
             <div class="input-group">
                 <label for="confirmPassword">Şifre Tekrar</label>
                 <input type="password" id="confirmPassword" required>
-                <div class="error-message" id="confirmPasswordError"></div>
             </div>
             <button type="submit">Kaydol</button>
         </form>
@@ -155,15 +133,13 @@
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
 
-            // Şifre kontrolü
             if(password !== confirmPassword) {
-                document.getElementById('confirmPasswordError').textContent = "Şifreler eşleşmiyor!";
-                document.getElementById('confirmPasswordError').style.display = "block";
+                alert("Şifreler eşleşmiyor!");
                 return;
             }
 
-            // Kullanıcı kaydı
-            const user = {
+            // Yeni kullanıcı objesi
+            const newUser = {
                 username: username,
                 email: email,
                 password: password,
@@ -176,7 +152,7 @@
             let users = JSON.parse(localStorage.getItem('users')) || [];
             
             // Yeni kullanıcıyı ekle
-            users.push(user);
+            users.push(newUser);
             
             // LocalStorage'a kaydet
             localStorage.setItem('users', JSON.stringify(users));
