@@ -6,9 +6,7 @@
     <title>Global Admin Paneli</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #f4f6f9;
-        }
+        body { background-color: #f4f6f9; }
         .admin-card {
             background: white;
             border-radius: 10px;
@@ -21,27 +19,30 @@
         <div class="row">
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h1>Global Admin Kontrol Paneli</h1>
-                    <button onclick="logout()" class="btn btn-danger">Çıkış Yap</button>
+                    <h1 class="text-primary">Global Admin Kontrol Paneli</h1>
+                    <div>
+                        <span id="adminUsername" class="me-3 text-muted"></span>
+                        <button onclick="logout()" class="btn btn-danger">Çıkış Yap</button>
+                    </div>
                 </div>
 
                 <div class="row mb-4">
                     <div class="col-md-4">
                         <div class="admin-card p-3 text-center">
                             <h5>Toplam Kullanıcılar</h5>
-                            <h3 id="totalUsers">0</h3>
+                            <h3 id="totalUsers" class="text-primary">0</h3>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="admin-card p-3 text-center">
                             <h5>Online Kullanıcılar</h5>
-                            <h3 id="onlineUsers">0</h3>
+                            <h3 id="onlineUsers" class="text-success">0</h3>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="admin-card p-3 text-center">
                             <h5>Bugünkü Kayıtlar</h5>
-                            <h3 id="todayRegistrations">0</h3>
+                            <h3 id="todayRegistrations" class="text-warning">0</h3>
                         </div>
                     </div>
                 </div>
@@ -51,13 +52,15 @@
                         <h4>Kullanıcı Listesi</h4>
                         <div class="d-flex">
                             <input type="text" id="searchInput" placeholder="Kullanıcı Ara..." class="form-control me-2 w-auto">
-                            <button onclick="exportUsers()" class="btn btn-success">Dışa Aktar</button>
+                            <button onclick="exportUsers()" class="btn btn-success me-2">Dışa Aktar</button>
+                            <button onclick="refreshUserList()" class="btn btn-info">Yenile</button>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th>ID</th>
                                     <th>Kullanıcı Adı</th>
                                     <th>E-posta</th>
                                     <th>Kayıt Tarihi</th>
@@ -76,142 +79,188 @@
     </div>
 
     <script>
-        // Global Admin Güvenlik Kontrolü
-        function checkAdminAuth() {
-            const adminKey = localStorage.getItem('adminAuthKey');
-            if (!adminKey || adminKey !== 'ADMIN_SECRET_KEY_2024') {
+    // Güvenlik ve Yetkilendirme Fonksiyonları
+    const ADMIN_SECRET_KEY = 'SECURE_ADMIN_KEY_2024_SUPER_SECRET';
+    const ENCRYPTION_KEY = 'GLOBAL_USER_ENCRYPTION_2024';
+
+    // Basit şifreleme fonksiyonu
+    function encrypt(data) {
+        return btoa(JSON.stringify(data));
+    }
+
+    function decrypt(encodedData) {
+        return JSON.parse(atob(encodedData));
+    }
+
+    // Admin Doğrulama
+    function checkAdminAuth() {
+        const adminData = localStorage.getItem('adminAuthData');
+        if (!adminData) {
+            window.location.href = 'login.html';
+            return false;
+        }
+
+        try {
+            const decryptedData = decrypt(adminData);
+            if (decryptedData.key !== ADMIN_SECRET_KEY) {
                 window.location.href = 'login.html';
                 return false;
             }
+            
+            document.getElementById('adminUsername').textContent = decryptedData.username;
             return true;
+        } catch {
+            window.location.href = 'login.html';
+            return false;
         }
+    }
 
-        // Kullanıcı Verilerini Alma
-        function getUsers() {
-            return JSON.parse(localStorage.getItem('globalUserDatabase') || '[]');
+    // Global Kullanıcı Veritabanı İşlemleri
+    function getUsers() {
+        const encryptedUsers = localStorage.getItem('globalUserDatabase') || '[]';
+        try {
+            return JSON.parse(encryptedUsers);
+        } catch {
+            return [];
         }
+    }
 
-        // İstatistikleri Güncelleme
-        function updateStatistics() {
-            const users = getUsers();
-            const now = new Date();
-            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    function saveUsers(users) {
+        localStorage.setItem('globalUserDatabase', JSON.stringify(users));
+    }
 
-            const totalUsers = users.length;
-            const onlineUsers = users.filter(u => u.isOnline).length;
-            const todayRegistrations = users.filter(u => 
-                new Date(u.registerDate) >= todayStart
-            ).length;
+    // İstatistik Güncelleme
+    function updateStatistics() {
+        const users = getUsers();
+        const now = new Date();
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-            document.getElementById('totalUsers').textContent = totalUsers;
-            document.getElementById('onlineUsers').textContent = onlineUsers;
-            document.getElementById('todayRegistrations').textContent = todayRegistrations;
+        const totalUsers = users.length;
+        const onlineUsers = users.filter(u => u.isOnline).length;
+        const todayRegistrations = users.filter(u => 
+            new Date(u.registerDate) >= todayStart
+        ).length;
 
-            renderUserList(users);
-        }
+        document.getElementById('totalUsers').textContent = totalUsers;
+        document.getElementById('onlineUsers').textContent = onlineUsers;
+        document.getElementById('todayRegistrations').textContent = todayRegistrations;
 
-        // Kullanıcı Listesini Render Etme
-        function renderUserList(users) {
-            const usersList = document.getElementById('usersList');
-            usersList.innerHTML = '';
+        renderUserList(users);
+    }
 
-            users.forEach((user, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${user.username}</td>
-                    <td>${user.email}</td>
-                    <td>${new Date(user.registerDate).toLocaleDateString()}</td>
-                    <td>${user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'İlk Kayıt'}</td>
-                    <td>${user.ipAddress || 'Bilinmiyor'}</td>
-                    <td>
-                        <span class="badge ${user.isOnline ? 'bg-success' : 'bg-secondary'}">
-                            ${user.isOnline ? 'Online' : 'Offline'}
-                        </span>
-                    </td>
-                    <td>
+    // Kullanıcı Listesi Render
+    function renderUserList(users) {
+        const usersList = document.getElementById('usersList');
+        usersList.innerHTML = '';
+
+        users.forEach((user, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${user.id || index + 1}</td>
+                <td>${user.username}</td>
+                <td>${user.email}</td>
+                <td>${new Date(user.registerDate).toLocaleDateString()}</td>
+                <td>${user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'İlk Kayıt'}</td>
+                <td>${user.ipAddress || 'Bilinmiyor'}</td>
+                <td>
+                    <span class="badge ${user.isOnline ? 'bg-success' : 'bg-secondary'}">
+                        ${user.isOnline ? 'Online' : 'Offline'}
+                    </span>
+                </td>
+                <td>
+                    <div class="btn-group">
                         <button onclick="editUser(${index})" class="btn btn-sm btn-warning">Düzenle</button>
                         <button onclick="deleteUser(${index})" class="btn btn-sm btn-danger">Sil</button>
-                    </td>
-                `;
-                usersList.appendChild(row);
-            });
-        }
+                    </div>
+                </td>
+            `;
+            usersList.appendChild(row);
+        });
+    }
 
-        // Kullanıcı Silme
-        function deleteUser(index) {
+    // Kullanıcı Silme
+    function deleteUser(index) {
+        const users = getUsers();
+        if (confirm('Kullanıcıyı silmek istediğinizden emin misiniz?')) {
+            users.splice(index, 1);
+            saveUsers(users);
+            updateStatistics();
+        }
+    }
+
+    // Kullanıcı Düzenleme
+    function editUser(index) {
+        const users = getUsers();
+        const user = users[index];
+
+        const newUsername = prompt('Yeni kullanıcı adı:', user.username);
+        const newEmail = prompt('Yeni e-posta:', user.email);
+
+        if (newUsername && newEmail) {
+            users[index] = {
+                ...user,
+                username: newUsername,
+                email: newEmail
+            };
+
+            saveUsers(users);
+            updateStatistics();
+        }
+    }
+
+    // Kullanıcı Dışa Aktarma
+    function exportUsers() {
+        const users = getUsers();
+        const csvContent = [
+            "ID,Kullanıcı Adı,E-posta,Kayıt Tarihi,Son Giriş,IP Adresi,Online Durumu",
+            ...users.map(user => 
+                `${user.id},${user.username},${user.email},${user.registerDate},${user.lastLogin || ''},${user.ipAddress || ''},${user.isOnline}`
+            )
+        ].join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", `kullanicilar_${new Date().toLocaleDateString()}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // Arama Fonksiyonu
+    function setupSearch() {
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('keyup', function() {
+            const value = this.value.toLowerCase();
             const users = getUsers();
-            if (confirm('Bu kullanıcıyı silmek istediğinizden emin misiniz?')) {
-                users.splice(index, 1);
-                localStorage.setItem('globalUserDatabase', JSON.stringify(users));
-                updateStatistics();
-            }
+            const filteredUsers = users.filter(user => 
+                user.username.toLowerCase().includes(value) || 
+                user.email.toLowerCase().includes(value) ||
+                (user.ipAddress && user.ipAddress.toLowerCase().includes(value))
+            );
+            renderUserList(filteredUsers);
+        });
+    }
+
+    // Liste Yenileme
+    function refreshUserList() {
+        updateStatistics();
+    }
+
+    // Çıkış İşlemi
+    function logout() {
+        localStorage.removeItem('adminAuthData');
+        window.location.href = 'login.html';
+    }
+
+    // Sayfa Yüklendiğinde
+    window.onload = function() {
+        if (checkAdminAuth()) {
+            updateStatistics();
+            setupSearch();
         }
-
-        // Kullanıcı Düzenleme
-        function editUser(index) {
-            const users = getUsers();
-            const user = users[index];
-
-            const newUsername = prompt('Yeni kullanıcı adı:', user.username);
-            const newEmail = prompt('Yeni e-posta:', user.email);
-
-            if (newUsername && newEmail) {
-                users[index] = {
-                    ...user,
-                    username: newUsername,
-                    email: newEmail
-                };
-
-                localStorage.setItem('globalUserDatabase', JSON.stringify(users));
-                updateStatistics();
-            }
-        }
-
-        // Kullanıcı Dışa Aktarma
-        function exportUsers() {
-            const users = getUsers();
-            const csvContent = users.map(user => 
-                `${user.username},${user.email},${user.registerDate},${user.lastLogin || ''},${user.ipAddress || ''}`
-            ).join('\n');
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
-            const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", "kullanicilar.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        // Arama Fonksiyonu
-        function setupSearch() {
-            const searchInput = document.getElementById('searchInput');
-            searchInput.addEventListener('keyup', function() {
-                const value = this.value.toLowerCase();
-                const users = getUsers();
-                const filteredUsers = users.filter(user => 
-                    user.username.toLowerCase().includes(value) || 
-                    user.email.toLowerCase().includes(value) ||
-                    (user.ipAddress && user.ipAddress.includes(value))
-                );
-                renderUserList(filteredUsers);
-            });
-        }
-
-        // Çıkış İşlemi
-        function logout() {
-            localStorage.removeItem('adminAuthKey');
-            window.location.href = 'login.html';
-        }
-
-        // Sayfa Yüklendiğinde
-        window.onload = function() {
-            if (checkAdminAuth()) {
-                updateStatistics();
-                setupSearch();
-            }
-        };
+    };
     </script>
 </body>
 </html>
