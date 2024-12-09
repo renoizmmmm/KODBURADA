@@ -13,73 +13,63 @@
         }
 
         body {
-            background: #0f0f0f;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('https://images.unsplash.com/photo-1483664852095-d6cc6870702d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            color: #fff;
+            display: none;
         }
 
         .navbar {
-            background: rgba(15, 15, 15, 0.95);
-            padding: 1rem 2rem;
-            border-bottom: 1px solid rgba(0, 255, 85, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 0 20px rgba(0, 255, 85, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .user-info {
-            color: #00ff55;
             display: flex;
             align-items: center;
             gap: 1rem;
         }
 
         #clock {
-            color: #00ff55;
+            color: #fff;
             font-weight: bold;
         }
 
-        .logout-btn {
-            background: rgba(255, 0, 0, 0.2);
-            color: #ff3333;
-            border: 1px solid #ff3333;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-                        transition: all 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background: rgba(255, 0, 0, 0.3);
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
-        }
-
         .main-content {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: calc(100vh - 70px);
         }
 
         .search-container {
-            background: rgba(15, 15, 15, 0.9);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
             padding: 2rem;
-            border-radius: 15px;
-            border: 1px solid rgba(0, 255, 85, 0.3);
-            box-shadow: 0 0 20px rgba(0, 255, 85, 0.2);
+            border-radius: 20px;
             width: 90%;
             max-width: 600px;
-            backdrop-filter: blur(10px);
+            margin-top: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
             text-align: center;
-            color: #00ff55;
-            margin-bottom: 1.5rem;
-            text-shadow: 0 0 10px rgba(0, 255, 85, 0.5);
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .search-box {
@@ -90,73 +80,91 @@
 
         input[type="text"] {
             flex: 1;
-            padding: 12px;
-            background: rgba(15, 15, 15, 0.8);
-            border: 2px solid #00ff55;
-            border-radius: 8px;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
             color: #fff;
-            transition: all 0.3s ease;
+            font-size: 1rem;
+            backdrop-filter: blur(5px);
+        }
+
+        input[type="text"]::placeholder {
+            color: rgba(255, 255, 255, 0.7);
         }
 
         input[type="text"]:focus {
             outline: none;
-            box-shadow: 0 0 15px rgba(0, 255, 85, 0.4);
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .search-btn {
-            background: #00ff55;
-            color: #0f0f0f;
+            padding: 15px 30px;
             border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
+            border-radius: 10px;
+            background: #fff;
+            color: #000;
             font-weight: bold;
+            cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(0, 255, 85, 0.2);
         }
 
         .search-btn:hover {
-            background: #00cc44;
-            box-shadow: 0 0 25px rgba(0, 255, 85, 0.4);
-            transform: scale(1.05);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
         .filters {
             display: flex;
             gap: 1rem;
-            margin-bottom: 1.5rem;
             flex-wrap: wrap;
             justify-content: center;
         }
 
         .filter-option {
-            background: rgba(0, 255, 85, 0.1);
-            color: #00ff55;
             padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
-            border: 1px solid rgba(0, 255, 85, 0.3);
+            backdrop-filter: blur(5px);
         }
 
         .filter-option:hover {
-            background: rgba(0, 255, 85, 0.2);
-            box-shadow: 0 0 15px rgba(0, 255, 85, 0.4);
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
         }
 
-        .admin-link {
-            color: #00ff55;
-            text-decoration: none;
-            margin-left: 1rem;
-            padding: 0.5rem 1rem;
-            border: 1px solid #00ff55;
-            border-radius: 5px;
+        .logout-btn {
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .admin-link:hover {
-            background: rgba(0, 255, 85, 0.1);
-            box-shadow: 0 0 15px rgba(0, 255, 85, 0.3);
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .search-box {
+                flex-direction: column;
+            }
+
+            .search-btn {
+                width: 100%;
+            }
+
+            .filters {
+                gap: 0.5rem;
+            }
+
+            .filter-option {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -165,7 +173,6 @@
         <div class="user-info">
             <span id="username">Hoşgeldin</span>
             <div id="clock"></div>
-            <a href="admin.html" class="admin-link" id="adminLink" style="display: none;">Admin Paneli</a>
         </div>
         <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
     </nav>
@@ -181,11 +188,26 @@
                 <div class="filter-option">Son 24 Saat</div>
                 <div class="filter-option">Son 1 Hafta</div>
                 <div class="filter-option">Sadece PDF</div>
+                <div class="filter-option">Türkçe</div>
             </div>
         </div>
     </div>
 
     <script>
+        // Sayfa yüklenme kontrolü
+        window.onload = function() {
+            if (!sessionStorage.getItem('isLoggedIn')) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            document.body.style.display = 'block';
+            const username = sessionStorage.getItem('username');
+            if (username) {
+                document.getElementById('username').textContent = `Hoşgeldin, ${username}`;
+            }
+        }
+
         // Saat gösterimi
         function updateClock() {
             const now = new Date();
@@ -195,72 +217,44 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Sayfa yüklendiğinde oturum kontrolü
-        window.onload = function() {
-            if (!sessionStorage.getItem('isLoggedIn')) {
-                window.location.href = 'login.html';
-            }
-            
-            const username = sessionStorage.getItem('username');
-            if (username) {
-                document.getElementById('username').textContent = `Hoşgeldin, ${username}`;
-                
-                // Admin kontrolü
-                if (username === 'admin') {
-                    document.getElementById('adminLink').style.display = 'inline-block';
-                }
-            }
-
-            // Kullanıcı durumunu güncelle
-            updateUserStatus(username, true);
-        }
-
-        function updateUserStatus(username, isOnline) {
-            let users = JSON.parse(localStorage.getItem('users')) || [];
-            const userIndex = users.findIndex(u => u.username === username);
-            
-            if (userIndex !== -1) {
-                users[userIndex].isOnline = isOnline;
-                users[userIndex].lastLogin = new Date().toISOString();
-                localStorage.setItem('users', JSON.stringify(users));
-            }
-        }
-
         function searchPDF() {
             const searchTerm = document.getElementById('searchInput').value;
             const searchQuery = `${searchTerm} filetype:pdf`;
-            const googleSearchURL = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
-            window.open(googleSearchURL, '_blank');
+            window.open(`https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`, '_blank');
         }
 
         function logout() {
             const username = sessionStorage.getItem('username');
-            updateUserStatus(username, false);
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            
+            // Kullanıcı durumunu güncelle
+            users = users.map(user => {
+                if(user.username === username) {
+                    return {...user, isOnline: false};
+                }
+                return user;
+            });
+            
+            localStorage.setItem('users', JSON.stringify(users));
             sessionStorage.clear();
             window.location.href = 'login.html';
         }
 
+        // Enter tuşu ile arama
         document.getElementById('searchInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 searchPDF();
             }
         });
 
+        // Filtre animasyonları
         document.querySelectorAll('.filter-option').forEach(filter => {
             filter.addEventListener('click', function() {
-                this.style.background = 'rgba(0, 255, 85, 0.3)';
+                this.style.transform = 'scale(0.95)';
                 setTimeout(() => {
-                    this.style.background = 'rgba(0, 255, 85, 0.1)';
+                    this.style.transform = 'translateY(-2px)';
                 }, 200);
             });
-        });
-
-        // Sayfa kapatıldığında kullanıcı durumunu güncelle
-        window.addEventListener('beforeunload', function() {
-            const username = sessionStorage.getItem('username');
-            if (username) {
-                updateUserStatus(username, false);
-            }
         });
     </script>
 </body>
