@@ -182,49 +182,26 @@
                 document.body.style.display = 'block';
                 updateStats();
                 updateClock();
-                // Yeni eklenen - WebSocket bağlantısı
-                setupWebSocket();
             }
-        }
-
-        // WebSocket bağlantısı için yeni fonksiyon
-        function setupWebSocket() {
-            const ws = new WebSocket('ws://' + window.location.hostname + ':8080');
-            
-            ws.onmessage = function(event) {
-                const data = JSON.parse(event.data);
-                if (data.type === 'userUpdate') {
-                    updateStats();
-                }
-            };
-
-            ws.onerror = function(error) {
-                console.log('WebSocket error:', error);
-            };
         }
 
         function getUsers() {
-            let users = [];
             try {
-                users = JSON.parse(localStorage.getItem('users')) || [];
-                // LocalStorage'dan alınan verileri kontrol et
-                if (!Array.isArray(users)) {
-                    users = [];
-                    localStorage.setItem('users', JSON.stringify(users));
-                }
-            } catch (e) {
-                console.error('LocalStorage okuma hatası:', e);
-                users = [];
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                return users;
+            } catch (error) {
+                console.error('Veri okuma hatası:', error);
+                return [];
             }
-            return users;
         }
 
         function saveUsers(users) {
             try {
                 localStorage.setItem('users', JSON.stringify(users));
-            } catch (e) {
-                console.error('LocalStorage yazma hatası:', e);
-                alert('Kullanıcı verileri kaydedilirken bir hata oluştu!');
+                return true;
+            } catch (error) {
+                console.error('Veri kaydetme hatası:', error);
+                return false;
             }
         }
 
@@ -291,7 +268,7 @@
             const newEmail = prompt('Yeni e-posta:', user.email);
             if(!newEmail || !newEmail.trim()) return;
 
-                        const newPassword = prompt('Yeni şifre (boş bırakılırsa değişmez):', '');
+            const newPassword = prompt('Yeni şifre (boş bırakılırsa değişmez):', '');
 
             users[index] = {
                 ...user,
@@ -314,7 +291,6 @@
             const username = sessionStorage.getItem('username');
             const users = getUsers();
             
-            // Kullanıcının çevrimiçi durumunu güncelle
             const updatedUsers = users.map(u => {
                 if (u.username === username) {
                     return { ...u, isOnline: false };
@@ -327,9 +303,9 @@
             window.location.href = 'login.html';
         }
 
-        // Otomatik güncelleme için zamanlayıcılar
+        // Otomatik güncelleme için interval
         setInterval(updateClock, 1000);
-        setInterval(updateStats, 5000); // Her 5 saniyede bir güncelle
+        setInterval(updateStats, 2000); // Her 2 saniyede bir güncelle
 
         // Sayfa görünürlüğü değiştiğinde güncelle
         document.addEventListener('visibilitychange', function() {
@@ -355,4 +331,3 @@
     </script>
 </body>
 </html>
-
