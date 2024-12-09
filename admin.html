@@ -16,10 +16,12 @@
             background: #0f0f0f;
             min-height: 100vh;
             color: #00ff55;
+            padding: 20px;
         }
 
         .admin-container {
-            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .header {
@@ -30,9 +32,15 @@
             background: rgba(0, 255, 85, 0.1);
             border-radius: 10px;
             margin-bottom: 2rem;
+            border: 1px solid rgba(0, 255, 85, 0.3);
         }
 
-        .stats {
+        .header h1 {
+            font-size: 1.8rem;
+            text-shadow: 0 0 10px rgba(0, 255, 85, 0.5);
+        }
+
+        .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1rem;
@@ -47,16 +55,30 @@
             box-shadow: 0 0 15px rgba(0, 255, 85, 0.1);
         }
 
+        .stat-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .stat-card p {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(0, 255, 85, 0.5);
+        }
+
         .users-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 2rem;
             background: rgba(15, 15, 15, 0.9);
             border-radius: 10px;
             overflow: hidden;
+            margin-top: 2rem;
+            border: 1px solid rgba(0, 255, 85, 0.3);
         }
 
-        .users-table th, .users-table td {
+        .users-table th,
+        .users-table td {
             padding: 1rem;
             text-align: left;
             border-bottom: 1px solid rgba(0, 255, 85, 0.2);
@@ -64,6 +86,11 @@
 
         .users-table th {
             background: rgba(0, 255, 85, 0.1);
+            font-weight: bold;
+        }
+
+        .users-table tr:hover {
+            background: rgba(0, 255, 85, 0.05);
         }
 
         .online-status {
@@ -76,24 +103,60 @@
 
         .online {
             background: #00ff55;
+            box-shadow: 0 0 10px rgba(0, 255, 85, 0.5);
         }
 
         .offline {
             background: #ff3333;
+            box-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
         }
 
         .logout-btn {
-            background: rgba(255, 0, 0, 0.2);
+            background: rgba(255, 51, 51, 0.2);
             color: #ff3333;
-            border: none;
-            padding: 0.5rem 1rem;
+            border: 1px solid #ff3333;
+            padding: 0.8rem 1.5rem;
             border-radius: 5px;
             cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 51, 51, 0.3);
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.3);
         }
 
         #clock {
             font-size: 1.2rem;
             font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 255, 85, 0.5);
+        }
+
+        .action-btn {
+            background: rgba(0, 255, 85, 0.1);
+            color: #00ff55;
+            border: 1px solid rgba(0, 255, 85, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 5px;
+        }
+
+        .action-btn:hover {
+            background: rgba(0, 255, 85, 0.2);
+            box-shadow: 0 0 10px rgba(0, 255, 85, 0.3);
+        }
+
+        .delete-btn {
+            background: rgba(255, 51, 51, 0.1);
+            color: #ff3333;
+            border: 1px solid rgba(255, 51, 51, 0.3);
+        }
+
+        .delete-btn:hover {
+            background: rgba(255, 51, 51, 0.2);
+            box-shadow: 0 0 10px rgba(255, 51, 51, 0.3);
         }
     </style>
 </head>
@@ -105,7 +168,7 @@
             <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
         </div>
 
-        <div class="stats">
+        <div class="stats-container">
             <div class="stat-card">
                 <h3>Toplam Kullanıcı</h3>
                 <p id="totalUsers">0</p>
@@ -128,6 +191,7 @@
                     <th>Kayıt Tarihi</th>
                     <th>Son Giriş</th>
                     <th>Durum</th>
+                    <th>İşlemler</th>
                 </tr>
             </thead>
             <tbody id="usersList">
@@ -136,6 +200,18 @@
     </div>
 
     <script>
+        // Admin kontrolü
+        window.onload = function() {
+            const isAdmin = sessionStorage.getItem('isAdmin');
+            const username = sessionStorage.getItem('username');
+            
+            if (!isAdmin || username !== 'admin') {
+                window.location.href = 'login.html';
+                return;
+            }
+            updateStats();
+        }
+
         // Saat gösterimi
         function updateClock() {
             const now = new Date();
@@ -145,7 +221,7 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Kullanıcı istatistiklerini güncelle
+        // İstatistikleri güncelle
         function updateStats() {
             const users = JSON.parse(localStorage.getItem('users')) || [];
             const now = new Date();
@@ -166,7 +242,7 @@
             const usersList = document.getElementById('usersList');
             usersList.innerHTML = '';
 
-            users.forEach(user => {
+            users.forEach((user, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${user.username}</td>
@@ -177,26 +253,52 @@
                         <span class="online-status ${user.isOnline ? 'online' : 'offline'}"></span>
                         ${user.isOnline ? 'Online' : 'Offline'}
                     </td>
+                    <td>
+                        <button class="action-btn" onclick="editUser(${index})">Düzenle</button>
+                        <button class="action-btn delete-btn" onclick="deleteUser(${index})">Sil</button>
+                    </td>
                 `;
                 usersList.appendChild(row);
             });
         }
 
-        // Sayfa yüklendiğinde ve her 30 saniyede bir istatistikleri güncelle
-        updateStats();
-        setInterval(updateStats, 30000);
+        // Kullanıcı silme
+        function deleteUser(index) {
+            if(confirm('Bu kullanıcıyı silmek istediğinizden emin misiniz?')) {
+                let users = JSON.parse(localStorage.getItem('users')) || [];
+                users.splice(index, 1);
+                localStorage.setItem('users', JSON.stringify(users));
+                updateStats();
+            }
+        }
+
+        // Kullanıcı düzenleme
+        function editUser(index) {
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users[index];
+            
+            const newUsername = prompt('Yeni kullanıcı adı:', user.username);
+            if(newUsername && newUsername.trim()) {
+                const newEmail = prompt('Yeni e-posta:', user.email);
+                if(newEmail && newEmail.trim()) {
+                    users[index] = {
+                        ...user,
+                        username: newUsername.trim(),
+                        email: newEmail.trim()
+                    };
+                    localStorage.setItem('users', JSON.stringify(users));
+                    updateStats();
+                }
+            }
+        }
 
         function logout() {
+            sessionStorage.clear();
             window.location.href = 'login.html';
         }
 
-        // Admin kontrolü
-        window.onload = function() {
-            const currentUser = sessionStorage.getItem('username');
-            if (currentUser !== 'admin') {
-                window.location.href = 'login.html';
-            }
-        }
+        // Her 30 saniyede bir istatistikleri güncelle
+        setInterval(updateStats, 30000);
     </script>
 </body>
 </html>
