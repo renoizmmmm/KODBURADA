@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giriş Yap</title>
-    <style>
+   <style>
         * {
             margin: 0;
             padding: 0;
@@ -13,7 +13,11 @@
         }
 
         body {
-            background: #0f0f0f;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('https://images.unsplash.com/photo-1483664852095-d6cc6870702d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -21,21 +25,22 @@
             overflow: hidden;
         }
 
-        .login-container {
-            background: rgba(15, 15, 15, 0.9);
+        .register-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
             padding: 2.5rem;
             border-radius: 15px;
-            border: 1px solid rgba(0, 255, 85, 0.3);
-            box-shadow: 0 0 20px rgba(0, 255, 85, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             width: 90%;
             max-width: 400px;
         }
 
         h1 {
             text-align: center;
-            color: #00ff55;
+            color: #fff;
             margin-bottom: 2rem;
-            text-shadow: 0 0 10px rgba(0, 255, 85, 0.5);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .input-group {
@@ -44,15 +49,15 @@
 
         .input-group label {
             display: block;
-            color: #00ff55;
+            color: #fff;
             margin-bottom: 0.5rem;
         }
 
         .input-group input {
             width: 100%;
             padding: 12px;
-            background: rgba(15, 15, 15, 0.8);
-            border: 2px solid #00ff55;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
             color: #fff;
             transition: all 0.3s ease;
@@ -60,15 +65,16 @@
 
         .input-group input:focus {
             outline: none;
-            box-shadow: 0 0 15px rgba(0, 255, 85, 0.4);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
         }
 
         button {
             width: 100%;
             padding: 12px;
-            background: #00ff55;
-            color: #0f0f0f;
-            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
@@ -77,8 +83,8 @@
         }
 
         button:hover {
-            background: #00cc44;
-            box-shadow: 0 0 25px rgba(0, 255, 85, 0.4);
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
         }
 
         .register-link {
