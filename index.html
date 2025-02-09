@@ -2,615 +2,625 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1024">
-    <title>SLOT CARTEL</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eren Adıgüzel | Digital Artist</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Existing styles remain unchanged */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
+            background-color: #000;
+            color: #fff;
             overflow-x: hidden;
-            width: 100%;
-            min-width: 1024px;
-            position: relative;
         }
 
-        body::before {
-            content: '';
+        /* Loading Indicator */
+        .loader {
             position: fixed;
             top: 0;
             left: 0;
-            width: 250%;
-            height: 250%;
-            background-image: url('https://r.resimlink.com/p0nqXHtls15S.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            opacity: 0.8;
-            z-index: -1;
-        }
-
-        .navbar {
-            padding: 35px 0;
-            position: fixed;
             width: 100%;
-            top: 0;
-            z-index: 1000;
+            height: 100%;
+            background: #000;
             display: flex;
-            flex-direction: column;
-            background: rgba(0, 0, 0, 0.0);
-        }
-
-        .logo-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 200px;
-            width: auto;
-            z-index: 1001;
-            animation: logoFloat 3s ease-in-out infinite;
-        }
-
-        @keyframes logoFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .logo-img {
-            height: 300px;
-            width: auto;
-            filter: drop-shadow(0 0 100px rgba(255, 255, 255, 0.3));
-            transition: all 0.3s ease;
-        }
-
-        .logo-img:hover {
-            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
-            transform: scale(1.05);
-        }
-
-        .marquee-container {
-            width: 100%;
-            height: 60px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .social-sidebar {
-            position: fixed;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            padding: 20px;
-            border-radius: 20px;
-        }
-
-        .social-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            color: white;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .social-btn::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .social-btn:hover::before {
-            opacity: 1;
-        }
-
-        .social-btn:hover {
-            transform: scale(1.1);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-        }
-
-        .site-boxes {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            padding: 180px 40px 50px;
-            max-width: 1600px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-        }
-
-        .site-box {
-            border-radius: 50px;
-            padding: 25px;
-            text-align: center;
-            transition: all 0.4s ease;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(5px);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            background: rgba(0, 0, 0, 0.0);
-            cursor: pointer;
-        }
-
-        .site-box::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at center, rgba(255,255,255,0.1), transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .site-box:hover::before {
-            opacity: 1;
-        }
-
-        .site-box:hover {
-            transform: translateY(-10px);
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .site-image {
-            width: 100%;
-            height: 300px;
-            object-fit: contain;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .site-box:hover .site-image {
-            transform: scale(1.03);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-        }
-
-        .site-description {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-bottom: 25px;
-            min-height: 60px;
-        }
-
-        .premium-btn {
-            display: inline-block;
-            padding: 10px 35px;
-            background: linear-gradient(45deg, #000000, #000000);
-            border-radius: 30px;
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .premium-btn::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                transparent,
-                rgba(255, 255, 255, 0.3),
-                transparent
-            );
-            transform: rotate(45deg);
-            animation: buttonGlow 2s linear infinite;
-        }
-
-        @keyframes buttonGlow {
-            0% { transform: rotate(45deg) translateX(-100%); }
-            100% { transform: rotate(45deg) translateX(100%); }
-        }
-
-        .premium-btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 30px rgba(255, 8, 68, 0.5);
-        }
-
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            align-items: center;
             z-index: 2000;
-            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader span {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #fff;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg) }
+            100% { transform: rotate(360deg) }
+        }
+
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://r.resimlink.com/KQbEt8.jpg') center/cover no-repeat;
+            opacity: 0.3;
+            z-index: -1;
+            transition: all 0.8s ease;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Müzik Kontrol - Enhanced */
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(255, 45, 85, 0.3);
+        }
+
+        .music-control:hover {
+            transform: scale(1.1) rotate(10deg);
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .music-control i {
+            color: #fff;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .music-control.playing {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 45, 85, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 45, 85, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 45, 85, 0); }
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            padding: 10px 0;
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            backdrop-filter: blur(5px);
         }
 
-        .modal-content {
-            padding: 200px;
-            border-radius: 200px;
-            max-width: 600px;
-            width: 90%;
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff2d55, #0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 20px;
+            border-radius: 25px;
+            transition: all 0.3s;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(255, 255, 255, 0.1);
             position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            
-            animation: modalOpen 0.3s ease-out;
-            transform-origin: center;
+            overflow: hidden;
         }
 
-        @keyframes modalOpen {
-            from {
-                transform: scale(0.8);
-                opacity: 0;
-            }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(45deg, #ff2d55, #0ff);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            transform: scaleX(1);
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        section {
+            min-height: 100vh;
+            padding: 100px 20px;
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            transition: all 0.8s ease;
+        }
+
+        section.active {
+            opacity: 1;
+            visibility: visible;
+            position: relative;
+        }
+
+        #home {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .profile-container {
+            transform: translateY(50px);
+            opacity: 0;
+            transition: all 0.8s ease;
+        }
+
+        #home.active .profile-container {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .profile-img {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+
+        .profile-img::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 45, 85, 0.2), rgba(0, 255, 255, 0.2));
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .profile-img:hover {
+            transform: scale(1.05);
+            border-color: rgba(255, 45, 85, 0.5);
+            box-shadow: 0 0 30px rgba(255, 45, 85, 0.3);
+        }
+
+        .profile-img:hover::after {
+            opacity: 1;
+        }
+
+        .profile-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .profile-img:hover img {
+            transform: scale(1.1);
+        }
+
+        #home h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ff2d55, #bc13fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards 0.5s;
+        }
+
+        @keyframes fadeInUp {
             to {
-                transform: scale(1);
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #home p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards 0.7s;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 20px 0;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            cursor: pointer;
+            transform: translateY(50px);
+            opacity: 0;
+            transition: all 0.5s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        #gallery.active .gallery-item {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 45, 85, 0.2), rgba(0, 255, 255, 0.2));
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .gallery-item:hover::after {
+            opacity: 1;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .menu-btn:hover {
+            color: #ff2d55;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.5s ease;
+        }
+
+        section.active .section-header {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #ff2d55, #0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-header p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .menu-btn {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(0, 0, 0, 0.95);
+                padding: 20px;
+                flex-direction: column;
+                align-items: center;
+                backdrop-filter: blur(10px);
+                transform: translateY(-10px);
+                opacity: 0;
+                transition: all 0.3s ease;
+            }
+
+            .nav-links.active {
+                display: flex;
+                transform: translateY(0);
                 opacity: 1;
             }
-        }
 
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 24px;
-            color: white;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
+            .nav-links a {
+                width: 100%;
+                text-align: center;
+                margin: 10px 0;
+            }
 
-        .modal-close:hover {
-            
-            transform: rotate(90deg);
-        }
+            #home h1 {
+                font-size: 32px;
+            }
 
-        .modal-image {
-            width: 100%;
-            max-height: 5000px;
-            object-fit: contain;
-            margin-bottom: 20px;
-            border-radius: 10px;
-        }
+            .profile-img {
+                width: 200px;
+                height: 200px;
+            }
 
-        .modal-description {
-            color: white;
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
+            .gallery {
+                grid-template-columns: 1fr;
+            }
 
-        .snowflake {
-            position: fixed;
-            color: white;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.6;
-            animation: snowfall linear infinite;
-            will-change: transform;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-        }
-
-        @keyframes snowfall {
-            to { transform: translateY(110vh); }
-        }
-
-        .footer {
-            text-align: center;
-            padding: 40px;
-            position: relative;
-            z-index: 2;
-            margin-top: 40px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .footer p {
-            font-size: 1rem;
-            font-weight: bold;
-            background: linear-gradient(45deg, #fff, #fff);
-            -webkit-background-clip: text;
-            color: transparent;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-        }
-
-        @keyframes textGlow {
-            from { text-shadow: 0 0 20px rgba(255, 8, 68, 0.0); }
+            .gallery-item {
+                aspect-ratio: 4/3;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Modal -->
-    <div class="modal" id="siteModal">
-        <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <img class="modal-image" src="" alt="Site Image">
-            <p class="modal-description"></p>
-            <a href="#" class="premium-btn modal-btn">HEMEN KATIL</a>
-        </div>
+    <div class="loader">
+        <span></span>
     </div>
 
-    <div id="snow-container"></div>
+    <div class="parallax-bg"></div>
+    
+    <div class="music-control" onclick="toggleMusic()">
+        <i class="fas fa-music"></i>
+    </div>
 
-    <nav class="navbar">
-        <div class="nav-top">
-            <div class="logo-container">
-                <img src="https://r.resimlink.com/sHZeEBvFbV.png" alt="Logo" class="logo-img">
+    <audio id="bgMusic" loop>
+        <source src="/Klasd/background-music.mp3" type="audio/mp3">
+    </audio>
+
+    <header>
+        <nav class="container">
+            <div class="logo" onclick="showSection('home')">EA</div>
+            <button class="menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links">
+                <a href="#" onclick="showSection('home')">Ana Sayfa</a>
+                <a href="#" onclick="showSection('gallery')">Galeri</a>
+            </div>
+        </nav>
+    </header>
+
+    <section id="home" class="active">
+        <div class="container">
+            <div class="profile-container">
+                <div class="profile-img">
+                    <img src="https://r.resimlink.com/7s83IgLaM.jpg" alt="Profile">
+                </div>
+                <h1>Eren Adıgüzel</h1>
+                <p>Digital Artist & Creator</p>
             </div>
         </div>
-        <div class="marquee-container">
-            <div class="marquee"></div>
+    </section>
+
+    <section id="gallery">
+        <div class="container">
+            <div class="section-header">
+                <h2>Galeri</h2>
+                <p>Dijital sanat eserlerimden öne çıkan çalışmalar</p>
+            </div>
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="https://r.resimlink.com/CVLU0j26.jpg" alt="Art 1">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://r.resimlink.com/Vm7p9-O5A.jpg" alt="Art 2">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://r.resimlink.com/hgCbRoW.jpg" alt="Art 3">
+                </div>
+            </div>
         </div>
-    </nav>
-
-    <div class="social-sidebar">
-        <a href="https://t.me/KODBURADA" class="social-btn telegram" title="Telegram Kanalı">
-            <i class="fab fa-telegram"></i>
-        </a>
-        <a href="https://www.instagram.com/kodburadaslot?igsh=MWdqd2Z1enJuZmdjaQ==" class="social-btn instagram" title="Instagram Sayfası">
-            <i class="fab fa-instagram"></i>
-        </a>
-        <a href="https://x.com/OBalta81694?t=YIsoINwKJLjUNn_8gQAzDg&s=09" class="social-btn twitter" title="Twitter Hesabı">
-            <i class="fab fa-twitter"></i>
-        </a>
-        <a href="https://youtube.com/@kodburadagelcasino?si=ypAM3nqYUYnv9bYJ" class="social-btn youtube" title="Youtube Kanalı">
-            <i class="fab fa-youtube"></i>
-        </a>
-        <a href="http://tiktok.com/@kodburada_581" class="social-btn tiktok" title="TikTok Hesabı">
-            <i class="fab fa-tiktok"></i>
-        </a>
-        <a href="YOUR_SKYPE_LINK" class="social-btn skype" title="Skype İletişim">
-            <i class="fab fa-skype"></i>
-        </a>
-    </div>
-
-        <div class="site-boxes">
-        <!-- Site Box 1 -->
-        <div class="site-box animate__animated animate__fadeInUp">
-            <img src="https://r.resimlink.com/CMh9YKWEbl.png" alt="site1" class="site-image">
-            <p class="site-description">🌟 Otobet, açılışa özel 800 TL Deneme Bonusu ile seni karşılıyor. Bu fırsatı yakala ve kazanmaya şimdi başla!</p>
-            <a href="https://cutt.ly/XePQcEf1" class="premium-btn">HEMEN KATIL</a>
-        </div>
-
-        <!-- Site Box 2 -->
-        <div class="site-box animate__animated animate__fadeInUp">
-            <img src="https://r.resimlink.com/pbjWKnvlmq.png" alt="Site 2" class="site-image">
-            <p class="site-description">100₺ Spor&Casino Nakit Deneme Bonusu! 🎰 Betportal üyeliği oluştur ve anında 100₺ Nakit Bonus kazan! 💰 Yatırım şartı yok!</p>
-            <a href="https://betportalgiris.ws/canberk" class="premium-btn">HEMEN KATIL</a>
-        </div>
-
-        <!-- Site Box 3 -->
-        <div class="site-box animate__animated animate__fadeInUp">
-            <img src="https://r.resimlink.com/hCdapojgcbx_.png" alt="Site 3" class="site-image">
-            <p class="site-description">Sadakat Bonusu 4 Yatırıma 5. Yatırım Bayspin'den Hediye. BAYSPİN İLE KAZANMAYA BAŞLA 🎁</p>
-            <a href="https://cutt.ly/5eXZ1voD" class="premium-btn">HEMEN KATIL</a>
-        </div>
-
-        <!-- Site Box 4 -->
-        <div class="site-box animate__animated animate__fadeInUp">
-            <img src="https://r.resimlink.com/jDUo2BcYK.png" alt="Site 4" class="site-image">
-            <p class="site-description">GRANDPASHABET DENEME BONUSU 200 FREESPIN 🎁 KAZANMAYA BAŞLA 💷</p>
-            <a href="https://shortyum.online/kodburadamt" class="premium-btn">HEMEN KATIL</a>
-        </div>
-
-        <!-- Site Box 5 -->
-        <div class="site-box animate__animated animate__fadeInUp">
-            <img src="https://r.resimlink.com/8WwfRLp.png" alt="Site 5" class="site-image">
-            <p class="site-description">400 TL YA DA 400 FREESPIN DENEME BONUSU 🎁 Yatırım, Çevrim Şartı Yok. Dilediğin Alanda Katılım.</p>
-            <a href="https://cutt.ly/LeDFVRIa" class="premium-btn">HEMEN KATIL</a>
-        </div>
-
-        <!-- Site Box 6 -->
-        <div class="site-box animate__animated animate__fadeInUp">
-            <img src="https://r.resimlink.com/_l2nP.png" alt="Site 6" class="site-image">
-            <p class="site-description">YENİLENDİ ! BETEWİN'DEN HERKESE HOŞGELDİN HEDİYESİ ! AVANTAJLARIN ADRESİ BETEWİN'E HEMEN ÜYE OL ! 1.500 ₺ Deneme Bonusu İle Heyecana Ortak Ol !</p>
-            <a href="https://cutt.ly/DeYr6dwb" class="premium-btn">HEMEN KATIL</a>
-        </div>
-
-        <!-- Site Box 7 -->
-        <div class="site-box animate__animated animate__fadeInUp">
-            <img src="https://r.resimlink.com/3ctnE2.png" alt="Site 7" class="site-image">
-            <p class="site-description">CASİNOMHUB; 40.000 TL CASINO + 40.000 TL SPOR HOŞ GELDİN BONUSU - TIKLA VERELİM!</p>
-            <a href="https://chub.nakjdjsd.com/tr?partner=p120576p120884p91ca#registration" class="premium-btn">HEMEN KATIL</a>
-        </div>
-
-        <!-- Site Box 8 -->
-        <div class="site-box animate__animated animate__fadeInUp">
-            <img src="https://r.resimlink.com/Bj7UN2xPAp.png" alt="Site 8" class="site-image">
-            <p class="site-description">Ligobet'ten Black Friday'e Özel Dev Deneme Bonusu! 750₺ Deneme Bonusu ile ilk adımı kazançla at! Risk yok, sadece eğlence ve kazanç</p>
-            <a href="https://cutt.ly/BeElY3ux" class="premium-btn">HEMEN KATIL</a>
-        </div>
-
-        <!-- Site Box 9 -->
-        <div class="site-box animate__animated animate__fadeInUp">
-            <img src="https://r.resimlink.com/PhW5sZkEJbd.png" alt="Site 9" class="site-image">
-            <p class="site-description">İLK YATIRIMA ÖZEL %300 BONUS ZLOT'TA ! TARAFINI SEÇ VE KAZAN! 777₺ NAKİT Mİ, YOKSA 777₺ DEĞERİNDE FREESPİN Mİ</p>
-            <a href="https://cutt.ly/ReFEfhnI" class="premium-btn">HEMEN KATIL</a>
-        </div>
-
-        <!-- Site Box 10 -->
-        <div class="site-box animate__animated animate__fadeInUp">
-            <img src="https://r.resimlink.com/hgdkefoacGl9.png" alt="Site 10" class="site-image">
-            <p class="site-description">Yatırımsız 250₺ Deneme Bonusu Anında Hesabında! İster Casino Alanında, İster Spor Alanında Bahsini Yap Ve Yatırım Yapmadan Çekim Yap!</p>
-            <a href="https://cutt.ly/reis2658dama" class="premium-btn">HEMEN KATIL</a>
-        </div>
-
-        <!-- Site Box 11 -->
-        <div class="site-box animate__animated animate__fadeInUp">
-            <img src="https://r.resimlink.com/HUtJ5CnOX.png" alt="Site 11" class="site-image">
-            <p class="site-description">🎯 🤑Yeni Üyeliklere Özel 100 Freespin Deneme Bonusu⤵️
-🤜Çevrimsiz!
-
-🍭Sweet Bonanza'da geçerlidir.
-⚡️Min-Maks. 250₺ Çekim</p>
-            <a href="https://mbmt.info/MhMn16" class="premium-btn">HEMEN KATIL</a>
-        </div>
-
-        <!-- Site Box 12 -->
-        <div class="site-box animate__animated animate__fadeInUp">
-            <img src="https://r.resimlink.com/iTFM_ozJ.png" alt="Site 12" class="site-image">
-            <p class="site-description">🌟 HOLEYY | 200 TL DENEME BONUSU | %200 FREESPIN |10.000TL İLK YATIRIM BONUSU | %100 1000 TL HAPPY DAYS BONUSU | %30 KAYIP BONUSU | LİMİTSİZ ÇEKİM!</p>
-            <a href="https://cutt.ly/ceKaJdAx" class="premium-btn">HEMEN KATIL</a>
-        </div>
-
-        <!-- Site Box 13 -->
-        <div class="site-box animate__animated animate__fadeInUp">
-            <img src="https://r.resimlink.com/YHq6fkz.png" alt="Site 13" class="site-image">
-            <p class="site-description">💎 250 TL Freebet ya da 250 Freespin + %100 7.500₺'ye kadar SLOT İLK YATIRIM BONUSU +LİMİTSİZ KAZANÇ SINIRSIZ ÇEKİM İMKANI!</p>
-            <a href="https://cutt.ly/oeHUF4jW" class="premium-btn">HEMEN KATIL</a>
-        </div>
-
-        <!-- Site Box 14 -->
-        <div class="site-box animate__animated animate__fadeInUp">
-            <img src="https://r.resimlink.com/HhJl7.png" alt="Site 14" class="site-image">
-            <p class="site-description">🏆 2025 TL DENEME BONUSU VAYCASİNO'DA!
-
-🔗Hala Üye Değilsen Hemen Giriş Yap!👇</p>
-            <a href="https://t2m.io/2220683" class="premium-btn">HEMEN KATIL</a>
-        </div>
-
-        <!-- Site Box 15 -->
-        <div class="site-box animate__animated animate__fadeInUp">
-            <img src="https://r.resimlink.com/hr79I4g.png" alt="Site 15" class="site-image">
-            <p class="site-description">🏆 250 TL Freebet ya da 250 Freespin + %100 7.777₺'ye kadar SLOT İLK YATIRIM BONUSU + SINIRSIZ ÇEKİM İMKANI!👇</p>
-            <a href="https://cutt.ly/2eHUFsgu" class="premium-btn">HEMEN KATIL</a>
-        </div>
-
-    </div>
-
-
-    <footer class="footer">
-        <p>Sıradan siteleri unutun - Reis burada hüküm sürüyor 👑</p>
-    </footer>
+    </section>
 
     <script>
-        // Existing snow effect script
-        function createSnowflakes() {
-            const container = document.getElementById('snow-container');
-            const maxSnowflakes = 50;
+        const menuBtn = document.querySelector('.menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        const bgMusic = document.getElementById('bgMusic');
+        const musicControl = document.querySelector('.music-control');
+        const header = document.querySelector('header');
+        let isMusicPlaying = false;
+        
+        // Loading screen
+        window.addEventListener('load', () => {
+            document.querySelector('.loader').classList.add('fade-out');
+            setTimeout(() => {
+                document.querySelector('.loader').style.display = 'none';
+            }, 500);
+        });
 
-            for (let i = 0; i < maxSnowflakes; i++) {
-                const snowflake = document.createElement('div');
-                snowflake.className = 'snowflake';
-                snowflake.innerHTML = '❄';
+        // Scroll effect for header
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
 
-                const startX = Math.random() * window.innerWidth;
-                const duration = Math.random() * 3 + 4;
-                const delay = Math.random() * 5;
+        // Gallery item delay animation
+        function animateGalleryItems() {
+            const items = document.querySelectorAll('.gallery-item');
+            items.forEach((item, index) => {
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, 200 * index);
+            });
+        }
 
-                Object.assign(snowflake.style, {
-                    left: startX + 'px',
-                    animation: `snowfall ${duration}s linear ${delay}s infinite`,
-                    fontSize: Math.random() * 12 + 10 + 'px',
-                    opacity: Math.random() * 0.6 + 0.2
-                });
+        function showSection(sectionId) {
+            const parallaxBg = document.querySelector('.parallax-bg');
+            parallaxBg.style.opacity = sectionId === 'home' ? '0.3' : '0.1';
+            
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            const targetSection = document.getElementById(sectionId);
+            targetSection.classList.add('active');
+            
+            if (sectionId === 'gallery') {
+                animateGalleryItems();
+            }
+            
+            navLinks.classList.remove('active');
+            
+            // Ana sayfaya geçildiğinde müziği başlat
+            if (sectionId === 'home' && !isMusicPlaying) {
+                playMusic();
+            }
+            
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
 
-                container.appendChild(snowflake);
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                isMusicPlaying = false;
+                musicControl.classList.remove('playing');
+                document.querySelector('.music-control i').style.color = '#fff';
+            } else {
+                playMusic();
             }
         }
 
-        // Modal functionality
-        const modal = document.getElementById('siteModal');
-        const modalImage = modal.querySelector('.modal-image');
-        const modalDescription = modal.querySelector('.modal-description');
-        const modalBtn = modal.querySelector('.modal-btn');
-        const closeBtn = modal.querySelector('.modal-close');
-
-        // Add click event to all site boxes
-        document.querySelectorAll('.site-box').forEach(box => {
-            box.addEventListener('click', (e) => {
-                // Prevent click if the premium button was clicked
-                if (e.target.classList.contains('premium-btn')) return;
-                
-                const image = box.querySelector('.site-image').src;
-                const description = box.querySelector('.site-description').textContent;
-                const link = box.querySelector('.premium-btn').href;
-
-                modalImage.src = image;
-                modalDescription.textContent = description;
-                modalBtn.href = link;
-
-                modal.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
+        function playMusic() {
+            bgMusic.play().catch(error => {
+                console.log("Müzik otomatik başlatılamadı:", error);
             });
-        });
+            isMusicPlaying = true;
+            musicControl.classList.add('playing');
+            document.querySelector('.music-control i').style.color = '#ff2d55';
+        }
 
-        // Close modal when clicking close button or outside
-        closeBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
-
-        window.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        });
-
-        // Existing event listeners
+        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            createSnowflakes();
-            duplicateMarquee();
-
-            document.querySelectorAll('.site-box').forEach((box, index) => {
-                box.style.animationDelay = `${index * 0.1}s`;
+            showSection('home');
+            
+            // Add delay to gallery items
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            galleryItems.forEach((item, index) => {
+                item.style.transitionDelay = `${index * 0.1}s`;
             });
         });
 
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(() => {
-                const container = document.getElementById('snow-container');
-                container.innerHTML = '';
-                createSnowflakes();
-            }, 300);
+        // Handle mobile menu clicks outside
+        document.addEventListener('click', (e) => {
+            if (navLinks.classList.contains('active') && 
+                !navLinks.contains(e.target) && 
+                !menuBtn.contains(e.target)) {
+                navLinks.classList.remove('active');
+            }
         });
 
-        function duplicateMarquee() {
-            const marquee = document.querySelector('.marquee');
-            const clone = marquee.cloneNode(true);
-            document.querySelector('.marquee-container').appendChild(clone);
-        }
+        // Preload images for smooth transitions
+        window.addEventListener('load', () => {
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                const src = img.getAttribute('src');
+                if (src) {
+                    const preloadImg = new Image();
+                    preloadImg.src = src;
+                }
+            });
+        });
     </script>
 </body>
 </html>
