@@ -202,6 +202,47 @@
             position: relative;
         }
 
+        /* Video Gallery Styles */
+        .video-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            padding: 20px 0;
+        }
+
+        .video-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+            cursor: pointer;
+            transform: translateY(50px);
+            opacity: 0;
+            transition: all 0.5s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        #videos.active .video-item {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .video-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .video-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .video-item:hover video {
+            transform: scale(1.05);
+        }
+
         #home {
             display: flex;
             align-items: center;
@@ -432,12 +473,16 @@
                 height: 200px;
             }
 
-            .gallery {
+            .gallery, .video-gallery {
                 grid-template-columns: 1fr;
             }
 
             .gallery-item {
                 aspect-ratio: 4/3;
+            }
+
+            .video-item {
+                aspect-ratio: 16/9;
             }
         }
     </style>
@@ -459,13 +504,14 @@
 
     <header>
         <nav class="container">
-            <div class="logo" onclick="showSection('home')">EA</div>
+            <div class="logo" onclick="showSection('home')">EREN ADIGÜZEL</div>
             <button class="menu-btn">
                 <i class="fas fa-bars"></i>
             </button>
             <div class="nav-links">
                 <a href="#" onclick="showSection('home')">Ana Sayfa</a>
                 <a href="#" onclick="showSection('gallery')">Galeri</a>
+                <a href="#" onclick="showSection('videos')">Videolar</a>
             </div>
         </nav>
     </header>
@@ -489,45 +535,92 @@
                 <p>Dijital sanat eserlerimden öne çıkan çalışmalar</p>
             </div>
             <div class="gallery">
-    <div class="gallery-item">
-        <img src="https://r.resimlink.com/CVLU0j26.jpg" alt="Art 1">
-    </div>
-    <div class="gallery-item">
-        <img src="https://r.resimlink.com/Vm7p9-O5A.jpg" alt="Art 2">
-    </div>
-    <div class="gallery-item">
-        <img src="https://r.resimlink.com/hgCbRoW.jpg" alt="Art 3">
-    </div>
-    <div class="gallery-item">
-        <img src="https://r.resimlink.com/WXKdEsh.jpg" alt="Art 4">
-    </div>
-    <div class="gallery-item">
-        <img src="https://r.resimlink.com/5U3DkS1t8qhK.jpg" alt="Art 5">
-    </div>
-    <div class="gallery-item">
-        <img src="https://r.resimlink.com/G3e0MZksRl2.jpg" alt="Art 6">
-    </div>
-    <div class="gallery-item">
-        <img src="https://r.resimlink.com/v4OHC5iEw.jpg" alt="Art 7">
-    </div>
-    <div class="gallery-item">
-        <img src="https://r.resimlink.com/MNOTnFy1sB.jpg" alt="Art 8">
-    </div>
-    <div class="gallery-item">
-        <img src="https://r.resimlink.com/g-YMDN.jpg" alt="Art 9">
-    </div>
-    <div class="gallery-item">
-        <img src="https://r.resimlink.com/yI1H4rW.jpg" alt="Art 10">
-    </div>
-    <div class="gallery-item">
-        <img src="https://r.resimlink.com/l-MQTC0O.jpg" alt="Art 11">
-    </div>
-    <div class="gallery-item">
-        <img src="https://r.resimlink.com/KVNOukWRy.jpg" alt="Art 12">
-    </div>
-    <div class="gallery-item">
-        <img src="https://r.resimlink.com/nzypw3Mh.jpg" alt="Art 13">
-    </div>
+                <div class="gallery-item">
+                    <img src="https://r.resimlink.com/CVLU0j26.jpg" alt="Art 1">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://r.resimlink.com/Vm7p9-O5A.jpg" alt="Art 2">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://r.resimlink.com/hgCbRoW.jpg" alt="Art 3">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://r.resimlink.com/WXKdEsh.jpg" alt="Art 4">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://r.resimlink.com/5U3DkS1t8qhK.jpg" alt="Art 5">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://r.resimlink.com/5U3DkS1t8qhK.jpg" alt="Art 6">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://r.resimlink.com/v4OHC5iEw.jpg" alt="Art 7">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://r.resimlink.com/MNOTnFy1sB.jpg" alt="Art 8">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://r.resimlink.com/g-YMDN.jpg" alt="Art 9">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://r.resimlink.com/yI1H4rW.jpg" alt="Art 10">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://r.resimlink.com/l-MQTC0O.jpg" alt="Art 11">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://r.resimlink.com/KVNOukWRy.jpg" alt="Art 12">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://r.resimlink.com/nzypw3Mh.jpg" alt="Art 13">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="videos">
+        <div class="container">
+            <div class="section-header">
+                <h2>Videolar</h2>
+                <p>En son video çalışmalarım</p>
+            </div>
+            <div class="video-gallery">
+                <div class="video-item">
+                    <video controls>
+                        <source src="/videos/video1.mp4" type="video/mp4">
+                        Tarayıcınız video öğesini desteklemiyor.
+                    </video>
+                </div>
+                <div class="video-item">
+                    <video controls>
+                        <source src="/videos/video2.mp4" type="video/mp4">
+                        Tarayıcınız video öğesini desteklemiyor.
+                    </video>
+                </div>
+                <div class="video-item">
+                    <video controls>
+                        <source src="/videos/video3.mp4" type="video/mp4">
+                        Tarayıcınız video öğesini desteklemiyor.
+                    </video>
+                </div>
+                <div class="video-item">
+                    <video controls>
+                        <source src="/videos/video4.mp4" type="video/mp4">
+                        Tarayıcınız video öğesini desteklemiyor.
+                    </video>
+                </div>
+                <div class="video-item">
+                    <video controls>
+                        <source src="/videos/video5.mp4" type="video/mp4">
+                        Tarayıcınız video öğesini desteklemiyor.
+                    </video>
+                </div>
+                <div class="video-item">
+                    <video controls>
+                        <source src="/videos/video6.mp4" type="video/mp4">
+                        Tarayıcınız video öğesini desteklemiyor.
+                    </video>
+                </div>
             </div>
         </div>
     </section>
@@ -561,9 +654,8 @@
             navLinks.classList.toggle('active');
         });
 
-        // Gallery item delay animation
-        function animateGalleryItems() {
-            const items = document.querySelectorAll('.gallery-item');
+        // Gallery and Video items delay animation
+        function animateItems(items) {
             items.forEach((item, index) => {
                 setTimeout(() => {
                     item.style.opacity = '1';
@@ -584,12 +676,13 @@
             targetSection.classList.add('active');
 
             if (sectionId === 'gallery') {
-                animateGalleryItems();
+                animateItems(document.querySelectorAll('.gallery-item'));
+            } else if (sectionId === 'videos') {
+                animateItems(document.querySelectorAll('.video-item'));
             }
 
             navLinks.classList.remove('active');
 
-            // Ana sayfaya geçildiğinde müziği başlat
             if (sectionId === 'home' && !isMusicPlaying) {
                 playMusic();
             }
@@ -624,9 +717,9 @@
         document.addEventListener('DOMContentLoaded', () => {
             showSection('home');
 
-            // Add delay to gallery items
-            const galleryItems = document.querySelectorAll('.gallery-item');
-            galleryItems.forEach((item, index) => {
+            // Add delay to gallery and video items
+            const items = document.querySelectorAll('.gallery-item, .video-item');
+            items.forEach((item, index) => {
                 item.style.transitionDelay = `${index * 0.1}s`;
             });
         });
@@ -640,7 +733,7 @@
             }
         });
 
-        // Preload images for smooth transitions
+        // Preload images and videos for smooth transitions
         window.addEventListener('load', () => {
             const images = document.querySelectorAll('img');
             images.forEach(img => {
@@ -648,6 +741,18 @@
                 if (src) {
                     const preloadImg = new Image();
                     preloadImg.src = src;
+                }
+            });
+
+            const videos = document.querySelectorAll('video source');
+            videos.forEach(video => {
+                const src = video.getAttribute('src');
+                if (src) {
+                    const preloadVideo = document.createElement('link');
+                    preloadVideo.rel = 'preload';
+                    preloadVideo.as = 'video';
+                    preloadVideo.href = src;
+                    document.head.appendChild(preloadVideo);
                 }
             });
         });
