@@ -448,7 +448,7 @@
     </div>
 
     <div class="parallax-bg"></div>
-    
+
     <div class="music-control" onclick="toggleMusic()">
         <i class="fas fa-music"></i>
     </div>
@@ -489,15 +489,45 @@
                 <p>Dijital sanat eserlerimden öne çıkan çalışmalar</p>
             </div>
             <div class="gallery">
-                <div class="gallery-item">
-                    <img src="https://r.resimlink.com/CVLU0j26.jpg" alt="Art 1">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://r.resimlink.com/Vm7p9-O5A.jpg" alt="Art 2">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://r.resimlink.com/hgCbRoW.jpg" alt="Art 3">
-                </div>
+    <div class="gallery-item">
+        <img src="https://r.resimlink.com/CVLU0j26.jpg" alt="Art 1">
+    </div>
+    <div class="gallery-item">
+        <img src="https://r.resimlink.com/Vm7p9-O5A.jpg" alt="Art 2">
+    </div>
+    <div class="gallery-item">
+        <img src="https://r.resimlink.com/hgCbRoW.jpg" alt="Art 3">
+    </div>
+    <div class="gallery-item">
+        <img src="https://r.resimlink.com/WXKdEsh.jpg" alt="Art 4">
+    </div>
+    <div class="gallery-item">
+        <img src="https://r.resimlink.com/5U3DkS1t8qhK.jpg" alt="Art 5">
+    </div>
+    <div class="gallery-item">
+        <img src="https://r.resimlink.com/G3e0MZksRl2.jpg" alt="Art 6">
+    </div>
+    <div class="gallery-item">
+        <img src="https://r.resimlink.com/v4OHC5iEw.jpg" alt="Art 7">
+    </div>
+    <div class="gallery-item">
+        <img src="https://r.resimlink.com/MNOTnFy1sB.jpg" alt="Art 8">
+    </div>
+    <div class="gallery-item">
+        <img src="https://r.resimlink.com/g-YMDN.jpg" alt="Art 9">
+    </div>
+    <div class="gallery-item">
+        <img src="https://r.resimlink.com/yI1H4rW.jpg" alt="Art 10">
+    </div>
+    <div class="gallery-item">
+        <img src="https://r.resimlink.com/l-MQTC0O.jpg" alt="Art 11">
+    </div>
+    <div class="gallery-item">
+        <img src="https://r.resimlink.com/KVNOukWRy.jpg" alt="Art 12">
+    </div>
+    <div class="gallery-item">
+        <img src="https://r.resimlink.com/nzypw3Mh.jpg" alt="Art 13">
+    </div>
             </div>
         </div>
     </section>
@@ -509,7 +539,7 @@
         const musicControl = document.querySelector('.music-control');
         const header = document.querySelector('header');
         let isMusicPlaying = false;
-        
+
         // Loading screen
         window.addEventListener('load', () => {
             document.querySelector('.loader').classList.add('fade-out');
@@ -526,7 +556,7 @@
                 header.classList.remove('scrolled');
             }
         });
-        
+
         menuBtn.addEventListener('click', () => {
             navLinks.classList.toggle('active');
         });
@@ -545,25 +575,25 @@
         function showSection(sectionId) {
             const parallaxBg = document.querySelector('.parallax-bg');
             parallaxBg.style.opacity = sectionId === 'home' ? '0.3' : '0.1';
-            
+
             document.querySelectorAll('section').forEach(section => {
                 section.classList.remove('active');
             });
-            
+
             const targetSection = document.getElementById(sectionId);
             targetSection.classList.add('active');
-            
+
             if (sectionId === 'gallery') {
                 animateGalleryItems();
             }
-            
+
             navLinks.classList.remove('active');
-            
+
             // Ana sayfaya geçildiğinde müziği başlat
             if (sectionId === 'home' && !isMusicPlaying) {
                 playMusic();
             }
-            
+
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
@@ -593,7 +623,7 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             showSection('home');
-            
+
             // Add delay to gallery items
             const galleryItems = document.querySelectorAll('.gallery-item');
             galleryItems.forEach((item, index) => {
