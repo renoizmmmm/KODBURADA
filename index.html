@@ -3,759 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eren Adıgüzel | Digital Artist</title>
+    <title>PDF Kitap Arama</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1d4ed8;
+            --background-color: #f8fafc;
+            --text-color: #1e293b;
+            --card-bg: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --button-hover: #1d4ed8;
+            --icon-color: #1e293b;
+            --description-bg: #e2e8f0;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #3b82f6;
+            --secondary-color: #2563eb;
+            --background-color: #0f172a;
+            --text-color: #f1f5f9;
+            --card-bg: #1e293b;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --button-hover: #2563eb;
+            --icon-color: #f1f5f9;
+            --description-bg: #334155;
         }
 
         body {
-            background-color: #000;
-            color: #fff;
-            overflow-x: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            transition: all 0.3s ease;
         }
 
-        /* Loading Indicator */
-        .loader {
+        .header {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            transition: opacity 0.5s ease;
-        }
-
-        .loader.fade-out {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .loader span {
-            width: 48px;
-            height: 48px;
-            border: 5px solid #fff;
-            border-bottom-color: transparent;
-            border-radius: 50%;
-            display: inline-block;
-            animation: rotation 1s linear infinite;
-        }
-
-        @keyframes rotation {
-            0% { transform: rotate(0deg) }
-            100% { transform: rotate(360deg) }
-        }
-
-        .parallax-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://r.resimlink.com/KQbEt8.jpg') center/cover no-repeat;
-            opacity: 0.3;
-            z-index: -1;
-            transition: all 0.8s ease;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Müzik Kontrol - Enhanced */
-        .music-control {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(255, 45, 85, 0.3);
-        }
-
-        .music-control:hover {
-            transform: scale(1.1) rotate(10deg);
-            background: rgba(0, 0, 0, 0.9);
-        }
-
-        .music-control i {
-            color: #fff;
-            font-size: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .music-control.playing {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 45, 85, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(255, 45, 85, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 45, 85, 0); }
-        }
-
-        header {
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            position: fixed;
-            width: 100%;
-            z-index: 1000;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        header.scrolled {
-            padding: 10px 0;
-            background: rgba(0, 0, 0, 0.95);
-        }
-
-        nav {
+            right: 0;
+            padding: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 10px var(--shadow-color);
+            z-index: 1000;
         }
 
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-            background: linear-gradient(45deg, #ff2d55, #0ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .logo:hover {
-            transform: scale(1.1);
-        }
-
-        .nav-links {
+        .header-icons {
             display: flex;
-            gap: 20px;
+            gap: 1rem;
         }
 
-        .nav-links a {
-            color: #fff;
-            text-decoration: none;
-            padding: 8px 20px;
-            border-radius: 25px;
-            transition: all 0.3s;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background: rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(45deg, #ff2d55, #0ff);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .nav-links a:hover::after {
-            transform: scaleX(1);
-        }
-
-        .nav-links a:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        section {
-            min-height: 100vh;
-            padding: 100px 20px;
-            opacity: 0;
-            visibility: hidden;
-            position: absolute;
-            width: 100%;
-            top: 0;
-            left: 0;
-            transition: all 0.8s ease;
-        }
-
-        section.active {
-            opacity: 1;
-            visibility: visible;
-            position: relative;
-        }
-
-        /* Video Gallery Styles */
-        .video-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px;
-            padding: 20px 0;
-        }
-
-        .video-item {
-            position: relative;
-            border-radius: 15px;
-            overflow: hidden;
-            aspect-ratio: 16/9;
-            cursor: pointer;
-            transform: translateY(50px);
-            opacity: 0;
-            transition: all 0.5s ease;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        #videos.active .video-item {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .video-item video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .video-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-        }
-
-        .video-item:hover video {
-            transform: scale(1.05);
-        }
-
-        #home {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .profile-container {
-            transform: translateY(50px);
-            opacity: 0;
-            transition: all 0.8s ease;
-        }
-
-        #home.active .profile-container {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .profile-img {
-            width: 250px;
-            height: 250px;
-            border-radius: 50%;
-            margin: 0 auto 30px;
-            border: 3px solid rgba(255, 255, 255, 0.2);
-            overflow: hidden;
-            position: relative;
-            transition: all 0.5s ease;
-        }
-
-        .profile-img::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, rgba(255, 45, 85, 0.2), rgba(0, 255, 255, 0.2));
-            opacity: 0;
-            transition: all 0.5s ease;
-        }
-
-        .profile-img:hover {
-            transform: scale(1.05);
-            border-color: rgba(255, 45, 85, 0.5);
-            box-shadow: 0 0 30px rgba(255, 45, 85, 0.3);
-        }
-
-        .profile-img:hover::after {
-            opacity: 1;
-        }
-
-        .profile-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .profile-img:hover img {
-            transform: scale(1.1);
-        }
-
-        #home h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, #ff2d55, #bc13fe);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.8s ease forwards 0.5s;
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        #home p {
-            font-size: 18px;
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 30px;
-            letter-spacing: 2px;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.8s ease forwards 0.7s;
-        }
-
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            padding: 20px 0;
-        }
-
-        .gallery-item {
-            position: relative;
-            border-radius: 15px;
-            overflow: hidden;
-            aspect-ratio: 1;
-            cursor: pointer;
-            transform: translateY(50px);
-            opacity: 0;
-            transition: all 0.5s ease;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        #gallery.active .gallery-item {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .gallery-item::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, rgba(255, 45, 85, 0.2), rgba(0, 255, 255, 0.2));
-            opacity: 0;
-            transition: all 0.5s ease;
-        }
-
-        .gallery-item:hover::after {
-            opacity: 1;
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .gallery-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-        }
-
-        .gallery-item:hover img {
-            transform: scale(1.1);
-        }
-
-        .menu-btn {
-            display: none;
+        .icon-button {
             background: none;
             border: none;
-            color: white;
-            font-size: 24px;
+            color: var(--icon-color);
+            font-size: 1.5rem;
             cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
             transition: all 0.3s ease;
         }
 
-        .menu-btn:hover {
-            color: #ff2d55;
+        .icon-button:hover {
+            transform: scale(1.1);
+            color: var(--primary-color);
         }
 
-        .section-header {
+        .container {
+            max-width: 800px;
+            margin: 100px auto 2rem;
+            padding: 2rem;
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 4px 20px var(--shadow-color);
+        }
+
+        h1 {
             text-align: center;
-            margin-bottom: 50px;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.5s ease;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+            font-size: 2.2rem;
         }
 
-        section.active .section-header {
-            opacity: 1;
-            transform: translateY(0);
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
-        .section-header h2 {
-            font-size: 36px;
-            margin-bottom: 15px;
-            background: linear-gradient(45deg, #ff2d55, #0ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: var(--card-bg);
+            color: var(--text-color);
         }
 
-        .section-header p {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 16px;
-            max-width: 600px;
-            margin: 0 auto;
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+        }
+
+        .search-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .search-button:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-2px);
+        }
+
+        .description-box {
+            background-color: var(--description-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            text-align: center;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-color);
+            display: none;
+        }
+
+        .loading i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            color: #ef4444;
+            text-align: center;
+            padding: 1rem;
+            display: none;
+        }
+
+        #resultsContainer {
+            margin-top: 1rem;
+            text-align: center;
+            color: var(--text-color);
         }
 
         @media (max-width: 768px) {
-            .menu-btn {
-                display: block;
+            .container {
+                margin: 80px 1rem 1rem;
+                padding: 1rem;
             }
 
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: rgba(0, 0, 0, 0.95);
-                padding: 20px;
+            .search-box {
                 flex-direction: column;
-                align-items: center;
-                backdrop-filter: blur(10px);
-                transform: translateY(-10px);
-                opacity: 0;
-                transition: all 0.3s ease;
             }
 
-            .nav-links.active {
-                display: flex;
-                transform: translateY(0);
-                opacity: 1;
-            }
-
-            .nav-links a {
+            .search-button {
                 width: 100%;
-                text-align: center;
-                margin: 10px 0;
-            }
-
-            #home h1 {
-                font-size: 32px;
-            }
-
-            .profile-img {
-                width: 200px;
-                height: 200px;
-            }
-
-            .gallery, .video-gallery {
-                grid-template-columns: 1fr;
-            }
-
-            .gallery-item {
-                aspect-ratio: 4/3;
-            }
-
-            .video-item {
-                aspect-ratio: 16/9;
             }
         }
     </style>
 </head>
 <body>
-    <div class="loader">
-        <span></span>
-    </div>
-
-    <div class="parallax-bg"></div>
-
-    <div class="music-control" onclick="toggleMusic()">
-        <i class="fas fa-music"></i>
-    </div>
-
-    <audio id="bgMusic" loop>
-        <source src="/Klasd/background-music.mp3" type="audio/mp3">
-    </audio>
-
-    <header>
-        <nav class="container">
-            <div class="logo" onclick="showSection('home')">EREN ADIGÜZEL</div>
-            <button class="menu-btn">
-                <i class="fas fa-bars"></i>
+    <div class="header">
+        <a href="https://t.me/sohbetmuhabbettl" target="_blank" class="icon-button">
+            <i class="fab fa-telegram"></i>
+        </a>
+        <div class="header-icons">
+            <button class="icon-button" onclick="toggleTheme()">
+                <i class="fas fa-moon"></i>
             </button>
-            <div class="nav-links">
-                <a href="#" onclick="showSection('home')">Ana Sayfa</a>
-                <a href="#" onclick="showSection('gallery')">Galeri</a>
-                <a href="#" onclick="showSection('videos')">Videolar</a>
-            </div>
-        </nav>
-    </header>
-
-    <section id="home" class="active">
-        <div class="container">
-            <div class="profile-container">
-                <div class="profile-img">
-                    <img src="https://r.resimlink.com/7s83IgLaM.jpg" alt="Profile">
-                </div>
-                <h1>Eren Adıgüzel</h1>
-                <p>Digital Artist & Creator</p>
-            </div>
         </div>
-    </section>
+    </div>
 
-    <section id="gallery">
-        <div class="container">
-            <div class="section-header">
-                <h2>Galeri</h2>
-                <p>Dijital sanat eserlerimden öne çıkan çalışmalar</p>
-            </div>
-            <div class="gallery">
-                <div class="gallery-item">
-                    <img src="https://r.resimlink.com/CVLU0j26.jpg" alt="Art 1">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://r.resimlink.com/Vm7p9-O5A.jpg" alt="Art 2">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://r.resimlink.com/hgCbRoW.jpg" alt="Art 3">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://r.resimlink.com/WXKdEsh.jpg" alt="Art 4">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://r.resimlink.com/5U3DkS1t8qhK.jpg" alt="Art 5">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://r.resimlink.com/5U3DkS1t8qhK.jpg" alt="Art 6">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://r.resimlink.com/v4OHC5iEw.jpg" alt="Art 7">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://r.resimlink.com/MNOTnFy1sB.jpg" alt="Art 8">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://r.resimlink.com/g-YMDN.jpg" alt="Art 9">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://r.resimlink.com/yI1H4rW.jpg" alt="Art 10">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://r.resimlink.com/l-MQTC0O.jpg" alt="Art 11">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://r.resimlink.com/KVNOukWRy.jpg" alt="Art 12">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://r.resimlink.com/nzypw3Mh.jpg" alt="Art 13">
-                </div>
-            </div>
+    <div class="container">
+        <h1>PDF Kitap Arama</h1>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Kitap adı veya yazar adı girin...">
+            <button class="search-button" onclick="searchBooks()">
+                <i class="fas fa-search"></i> Ara
+            </button>
         </div>
-    </section>
-
-    <section id="videos">
-        <div class="container">
-            <div class="section-header">
-                <h2>Videolar</h2>
-                <p>En son video çalışmalarım</p>
-            </div>
-            <div class="video-gallery">
-                <div class="video-item">
-                    <video controls>
-                        <source src="/videos/video1.mp4" type="video/mp4">
-                        Tarayıcınız video öğesini desteklemiyor.
-                    </video>
-                </div>
-                <div class="video-item">
-                    <video controls>
-                        <source src="/videos/video2.mp4" type="video/mp4">
-                        Tarayıcınız video öğesini desteklemiyor.
-                    </video>
-                </div>
-                <div class="video-item">
-                    <video controls>
-                        <source src="/videos/video3.mp4" type="video/mp4">
-                        Tarayıcınız video öğesini desteklemiyor.
-                    </video>
-                </div>
-                <div class="video-item">
-                    <video controls>
-                        <source src="/videos/video4.mp4" type="video/mp4">
-                        Tarayıcınız video öğesini desteklemiyor.
-                    </video>
-                </div>
-                <div class="video-item">
-                    <video controls>
-                        <source src="/videos/video5.mp4" type="video/mp4">
-                        Tarayıcınız video öğesini desteklemiyor.
-                    </video>
-                </div>
-                <div class="video-item">
-                    <video controls>
-                        <source src="/videos/video6.mp4" type="video/mp4">
-                        Tarayıcınız video öğesini desteklemiyor.
-                    </video>
-                </div>
-            </div>
+        <div class="loading">
+            <i class="fas fa-spinner"></i> Aranıyor...
         </div>
-    </section>
+        <div class="error-message" id="errorMessage"></div>
+        <div id="resultsContainer"></div>
+        <div class="description-box">
+            ÇIKAN TÜM SONUÇLAR PDF DOSYASIDIR BİLGİNİZ OLSUN.<br>
+            HER BİRİNE TIKLADIĞINDA OTOMATİK OLARAK İNDİRİLİR<br>
+            SEVGİLERLE RENVOİ
+        </div>
+    </div>
 
     <script>
-        const menuBtn = document.querySelector('.menu-btn');
-        const navLinks = document.querySelector('.nav-links');
-        const bgMusic = document.getElementById('bgMusic');
-        const musicControl = document.querySelector('.music-control');
-        const header = document.querySelector('header');
-        let isMusicPlaying = false;
+        async function searchBooks() {
+            const searchInput = document.getElementById('searchInput');
+            const searchTerm = searchInput.value.trim();
+            if (!searchTerm) return;
 
-        // Loading screen
-        window.addEventListener('load', () => {
-            document.querySelector('.loader').classList.add('fade-out');
-            setTimeout(() => {
-                document.querySelector('.loader').style.display = 'none';
-            }, 500);
+            const loading = document.querySelector('.loading');
+            const resultsContainer = document.getElementById('resultsContainer');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            loading.style.display = 'block';
+            resultsContainer.innerHTML = '';
+            errorMessage.style.display = 'none';
+
+            try {
+                const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchTerm + ' filetype:pdf')}`;
+                window.open(searchUrl, '_blank');
+                loading.style.display = 'none';
+                
+                resultsContainer.innerHTML = '<p>Arama sonuçları yeni sekmede açıldı.</p>';
+
+            } catch (error) {
+                errorMessage.textContent = 'Arama sırasında bir hata oluştu';
+                errorMessage.style.display = 'block';
+                loading.style.display = 'none';
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchBooks();
+            }
         });
 
-        // Scroll effect for header
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const themeIcon = document.querySelector('.fa-moon, .fa-sun');
+            
+            if (currentTheme === 'dark') {
+                body.removeAttribute('data-theme');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
             } else {
-                header.classList.remove('scrolled');
-            }
-        });
-
-        menuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-
-        // Gallery and Video items delay animation
-        function animateItems(items) {
-            items.forEach((item, index) => {
-                setTimeout(() => {
-                    item.style.opacity = '1';
-                    item.style.transform = 'translateY(0)';
-                }, 200 * index);
-            });
-        }
-
-        function showSection(sectionId) {
-            const parallaxBg = document.querySelector('.parallax-bg');
-            parallaxBg.style.opacity = sectionId === 'home' ? '0.3' : '0.1';
-
-            document.querySelectorAll('section').forEach(section => {
-                section.classList.remove('active');
-            });
-
-            const targetSection = document.getElementById(sectionId);
-            targetSection.classList.add('active');
-
-            if (sectionId === 'gallery') {
-                animateItems(document.querySelectorAll('.gallery-item'));
-            } else if (sectionId === 'videos') {
-                animateItems(document.querySelectorAll('.video-item'));
-            }
-
-            navLinks.classList.remove('active');
-
-            if (sectionId === 'home' && !isMusicPlaying) {
-                playMusic();
-            }
-
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }
-
-        function toggleMusic() {
-            if (isMusicPlaying) {
-                bgMusic.pause();
-                isMusicPlaying = false;
-                musicControl.classList.remove('playing');
-                document.querySelector('.music-control i').style.color = '#fff';
-            } else {
-                playMusic();
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
             }
         }
 
-        function playMusic() {
-            bgMusic.play().catch(error => {
-                console.log("Müzik otomatik başlatılamadı:", error);
-            });
-            isMusicPlaying = true;
-            musicControl.classList.add('playing');
-            document.querySelector('.music-control i').style.color = '#ff2d55';
+        // Initialize theme from localStorage
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+            document.querySelector('.fa-moon').classList.replace('fa-moon', 'fa-sun');
         }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            showSection('home');
-
-            // Add delay to gallery and video items
-            const items = document.querySelectorAll('.gallery-item, .video-item');
-            items.forEach((item, index) => {
-                item.style.transitionDelay = `${index * 0.1}s`;
-            });
-        });
-
-        // Handle mobile menu clicks outside
-        document.addEventListener('click', (e) => {
-            if (navLinks.classList.contains('active') && 
-                !navLinks.contains(e.target) && 
-                !menuBtn.contains(e.target)) {
-                navLinks.classList.remove('active');
-            }
-        });
-
-        // Preload images and videos for smooth transitions
-        window.addEventListener('load', () => {
-            const images = document.querySelectorAll('img');
-            images.forEach(img => {
-                const src = img.getAttribute('src');
-                if (src) {
-                    const preloadImg = new Image();
-                    preloadImg.src = src;
-                }
-            });
-
-            const videos = document.querySelectorAll('video source');
-            videos.forEach(video => {
-                const src = video.getAttribute('src');
-                if (src) {
-                    const preloadVideo = document.createElement('link');
-                    preloadVideo.rel = 'preload';
-                    preloadVideo.as = 'video';
-                    preloadVideo.href = src;
-                    document.head.appendChild(preloadVideo);
-                }
-            });
-        });
     </script>
 </body>
 </html>
